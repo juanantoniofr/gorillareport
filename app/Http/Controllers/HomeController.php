@@ -34,6 +34,6 @@ class HomeController extends Controller
         $minutes = Carbon::now()->subMinutes(15)->format('Y-m-d H:i:s');
         $activeClients = Client::whereDate('updated_at', '>=', Carbon::now()->subMinutes(15) )->count();
 
-        return view('home',compact('numClients'));
+        return view('home',compact('numClients','activeClients'));
     }
 }
