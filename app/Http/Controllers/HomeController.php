@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Client;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+
 class HomeController extends Controller
 {
     /**
@@ -23,6 +27,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $clients = Client::all();
+        //Activity
+        $numClients = Client::all()->count();
+        $now = Carbon::now(); 
+        $minutes = Carbon::now()->subMinutes(15)->format('Y-m-d H:i:s');
+        $activeClients = Client::whereDate('updated_at', '>=', Carbon::now()->subMinutes(15) )->count();
+
+        return view('home',compact('numClients'));
     }
 }

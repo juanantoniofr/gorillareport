@@ -26,6 +26,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+// pc clients routes
+
+Route::get('clients', [ClientController::class,'index'])->middleware('auth')->name('clients');
+
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
