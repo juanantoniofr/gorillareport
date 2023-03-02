@@ -28,7 +28,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // pc clients routes
 
-Route::get('clients', [ClientController::class,'index'])->middleware('auth')->name('clients');
+Route::get('clients', 'App\Http\Controllers\ClientController@index')->middleware('auth')->name('clients');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);

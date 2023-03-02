@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
-###
+
 use App\Models\Client;
 use Carbon\Carbon;
 
@@ -12,9 +12,9 @@ class ClientController extends Controller
 
     public function index(Request $request)
     {
-        $clients = Client::all();
-        var_dump($clients);
-        exit;
+        //$clients = Client::all();
+        //var_dump($clients);
+        //exit;
         //$clients = Client::paginate(15);
         //$clients = Client::orderBy('ip')->paginate(15);
         //$clients = Client::sortable(['updated_at' => 'desc'])->paginate(15);
