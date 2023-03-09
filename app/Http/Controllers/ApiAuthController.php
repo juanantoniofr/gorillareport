@@ -32,4 +32,5 @@ class ApiAuthController extends Controller
             'token_type' => 'Bearer'
         ]);
     }
+
 }
