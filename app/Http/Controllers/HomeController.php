@@ -37,7 +37,7 @@ class HomeController extends Controller
         //manifest_status
         $clientsWithDefaultManifest = $clients->filter(function($client, $key){
             $information = json_decode($client->information);
-            if ($information->Manifest == "default_manifest")
+            if (isset($information->Manifest) && $information->Manifest == "default_manifest")
                 return true;
         });
 
@@ -45,6 +45,8 @@ class HomeController extends Controller
         $UpTimeclients_1d = $clients->filter(function($client, $key){
             
             $information = json_decode($client->information);
+            if (!isset($information->OsUptime))
+                return false;
             $strDateUpTime = Carbon::createFromTimestamp($information->OsUptime, 'Europe/Madrid');
             $strDateInit = Carbon::createFromFormat('Y-m-d H:i:s', '1970-01-01 00:00:00');
             $diffInDays = $strDateUpTime->diffInDays($strDateInit);

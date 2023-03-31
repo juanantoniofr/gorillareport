@@ -12,13 +12,7 @@ class ClientController extends Controller
 
     public function index(Request $request)
     {
-        //$clients = Client::all();
-        //var_dump($clients);
-        //exit;
-        //$clients = Client::paginate(15);
-        //$clients = Client::orderBy('ip')->paginate(15);
-        //$clients = Client::sortable(['updated_at' => 'desc'])->paginate(15);
-
+        
         $filter = $request->query('filter');
 
         if (!empty($filter)) {
@@ -38,21 +32,18 @@ class ClientController extends Controller
         return $client;
     }
 
-    public function store(Request $request)
+    public function register(Request $request)
     {
         
-        #$client = Client::create($request->all());
-
         $client = Client::updateOrCreate(
 
-            ['ip' =>  request('ip')],
+            ['huid' =>  request('huid')],
         
-            ['name' => request('name'), 'information' => request('information')]
+            ['ip' =>  request('ip'), 'name' => request('name'), 'information' => request('information')]
         
         );
 
         return response()->json($client, 201);
-        
         
     }
 
