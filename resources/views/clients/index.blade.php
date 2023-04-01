@@ -1,38 +1,44 @@
 @extends('layouts.app')
 @section('content')
-
-<h2>Pc-Clients</h2>
-<div class="row justify-content-md-center">
-
-    
-        <form class="form-inline" method="GET">
-        <div class="form-group mb-2">
-            <label for="filter" class="col-sm-2 col-form-label">Filter</label>
-            <input type="text" class="form-control" id="filter" name="filter" placeholder="Client name..." value="{{ $filter ?? '' }}">
+<div class="container py-5">
+<div class="row">
+    <div class="col-md-12 py-3">
+        <h1>Client List</h1>
+    </div>
+    <div class="col-md-12">
+        <form method="GET">
+        <div class="col align-items-end d-flex flex-column mb-3">
+            <div class="d-flex flex-column ">
+                <label for="filter" class="form-label">Filter</label>
+                <input type="text" class="form-control" id="filter" name="filter" placeholder="Client name..." value="{{ $filter ?? '' }}">
+                <span id="passwordHelpInline" class="form-text">
+                        Type the whole or part of the name and press enter.
+                </span>
+                
+            </div>
         </div>
-        <button type="submit" class="btn btn-default mb-2">Filter</button>
+            <!-- <button type="submit" class="btn btn-default mb-2">Filter</button> -->
         </form>
+    </div>
     
-
-    <div class="row">    
-  
-        <table class="table table-bordered">
+    <div class="col-md-12 table-responsive"> 
+        <table class="table table-dark table-hover table-bordered  align-middle">
             <thead>
-                <tr  class="">
+                <tr class="table-light">
                     <!-- <th class="col-1">ID</th> -->
-                    <th class="col-2" >@sortablelink('updated_at')</th>
-                    <th class="col-1" >@sortablelink('name')</th>
-                    <th class="col-1">@sortablelink('ip')</th>
-                    <th class="col-8">Information</th>
+                    <th class="py-3" >@sortablelink('updated_at')</th>
+                    <th class="py-3" >@sortablelink('name')</th>
+                    <th class="py-3">@sortablelink('ip')</th>
+                    <th class="py-3">Information</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($clients as $client)
                 <tr>
-                    <td >{{$client->updated_at}}</td>
-                    <td >{{$client->name}}</td>
-                    <td >{{$client->ip}}</td>
-                    <td >
+                    <td class="py-3">{{$client->updated_at}}</td>
+                    <td class="py-3"><a href="{{ route('clients.show',$client->id) }}"> {{$client->name}} </a></td>
+                    <td class="py-3">{{$client->ip}}</td>
+                    <td class="py-3">
                         <?php 
                             $information = json_decode($client->information,true);
                         ?>
@@ -53,4 +59,5 @@
         {!! $clients->appends(\Request::except('page'))->render() !!}
     </div>
 <div>
+</div>
 @endsection

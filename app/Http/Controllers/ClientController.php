@@ -29,7 +29,7 @@ class ClientController extends Controller
  
     public function show(Client $client)
     {
-        return $client;
+        return  view('clients.show')->with('client', $client);  
     }
 
     public function register(Request $request)
