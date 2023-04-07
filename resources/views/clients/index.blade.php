@@ -40,16 +40,14 @@
                     <td class="py-3">{{$client->ip}}</td>
                     <td class="py-3">
                         <?php 
-                            $information = json_decode($client->information,true);
+                            $information = json_decode($client->information, true);
                         ?>
-                        
-                        
-                        <p>
-                            @foreach(json_decode($client->information,true) as $key=>$value)
-                                    <span> <b>{{ $key }}:</b> {{ $value }} </span>
-                            @endforeach
-                        </p>
-                        
+                        @foreach(json_decode($client->information, true) as $key => $value)
+                            <span><b>{{$key}}:</b></span><br />
+                            @foreach($value as $key2 => $value2)
+                                <span><i>{{$key2}}: {{$value2}}</i></span>
+                            @endforeach                          
+                        @endforeach 
                     </td>
                 </tr>
                 @endforeach

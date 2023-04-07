@@ -32,7 +32,22 @@
                                     <tr>
                                         <th>ID</th><td>{{ $client->id }}</td>
                                     </tr>
-                                    <tr><th> Huid </th><td> {{ $client->huid }} </td></tr><tr><th> Name </th><td> {{ $client->name }} </td></tr><tr><th> Ip </th><td> {{ $client->ip }} </td></tr><tr><th> Information </th><td> {{ $client->information }} </td></tr><tr><th> Updated At </th><td> {{ $client->updated_at }} </td></tr>
+                                    <tr>
+                                        <th> Huid </th><td> {{ $client->huid }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Name </th><td> {{ $client->name }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Ip </th>
+                                        <td>{{ JS::from($client->ip)}} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Information </th><td> {{ $client->information }} </td>
+                                    </tr>
+                                    <tr>
+                                        <th> Updated At </th><td> {{ $client->updated_at }} </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
