@@ -39,7 +39,7 @@ class ClientController extends Controller
 
             ['huid' =>  request('huid')],
         
-            ['ip' =>  request('ip'), 'name' => request('name'), 'information' => request('information')]
+            ['ip' =>  request('ip'), 'name' => request('name')]
         
         );
 
@@ -50,7 +50,6 @@ class ClientController extends Controller
     /*
     Actualizamds el campo information del modelo client los valores recibidos en el request
     */
-    
     public function updateBasicInformation(Request $request)
     {
         #Obtenemos los datos del request
@@ -71,7 +70,6 @@ class ClientController extends Controller
             return response()->json(null, 400);
         }
     }
-
 
     public function update(Request $request, Client $client)
     {

@@ -37,13 +37,19 @@
                 <tr>
                     <td class="py-3">{{$client->updated_at}}</td>
                     <td class="py-3"><a href="{{ route('clients.show',$client->id) }}"> {{$client->name}} </a></td>
-                    <td class="py-3">{{$client->ip}}</td>
+                    <td class="py-3">
+                        <?php $ips = json_decode($client->ip, true) ?>
+                        {{ $ips }}
+                        {{ $client->ip }}
+                        
+                    </td>
                     <td class="py-3">
                         @foreach(json_decode($client->information, true) as $key => $value)
                             <span><b>{{$key}}:</b></span><br />
                             @foreach($value as $key2 => $value2)
                                 <span><i>{{$key2}}: {{$value2}}</i></span>
-                            @endforeach                          
+                            @endforeach
+                            <br />                     
                         @endforeach 
                     </td>
                 </tr>
