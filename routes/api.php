@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [ApiAuthController::class, 'login']);
 
 Route::post('/client/register', [ClientController::class, 'register']);
-
+Route::post('/client/updateBasicInformation', [ClientController::class, 'updateBasicInformation']);
 
 
 
