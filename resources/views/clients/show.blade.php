@@ -40,10 +40,19 @@
                                     </tr>
                                     <tr>
                                         <th> Ip </th>
-                                        <td>{{ JS::from($client->ip)}} </td>
+                                        <td>{{ $client->ip }} </td>
                                     </tr>
                                     <tr>
-                                        <th> Information </th><td> {{ $client->information }} </td>
+                                        <th> Information </th>
+                                        <td> 
+                                            @foreach(json_decode($client->information, true) as $key => $value)
+                                                <span><b>{{$key}}:</b></span><br />
+                                                @foreach($value as $key2 => $value2)
+                                                    <span><i>{{$key2}}: {{$value2}}</i></span>
+                                                @endforeach 
+                                                <br />                         
+                                            @endforeach
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th> Updated At </th><td> {{ $client->updated_at }} </td>
