@@ -29,8 +29,20 @@ class ClientController extends Controller
  
     public function show(Client $client)
     {
-        return  view('clients.show')->with('client', $client);  
+        #decodificar el campo report
+        $report = json_decode($client->report, true);
+
+        return  view('clients.show')->with('client', $client)->with('report', $report);  
     }
+
+    public function show_report(Client $client)
+    {
+        #decodificar el campo report
+        $report = json_decode($client->report);
+
+        return  view('clients.show_report')->with('client', $client)->with('report', $report);  
+    }
+
 
     public function register(Request $request)
     {

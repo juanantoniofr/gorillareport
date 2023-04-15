@@ -30,6 +30,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('clients', 'App\Http\Controllers\ClientController@index')->middleware('auth')->name('clients');
 Route::get('clients/{client}', 'App\Http\Controllers\ClientController@show')->middleware('auth')->name('clients.show');
+Route::get('clients/report/{client}', 'App\Http\Controllers\ClientController@show_report')->middleware('auth')->name('clients.show_report');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
