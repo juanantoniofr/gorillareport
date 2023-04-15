@@ -17,7 +17,7 @@ class Client extends Model
     use Sortable;
     
     protected $fillable = [
-        'huid', 'name','ip', 'information'
+        'huid', 'name','ip', 'information', 'report'
     ];
     
     public $sortable = ['name', 'ip', 'updated_at'];

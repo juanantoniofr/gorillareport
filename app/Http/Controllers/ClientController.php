@@ -71,6 +71,28 @@ class ClientController extends Controller
         }
     }
 
+    /* actualizamos el campo report del modelo client con los valores recibidos en el request */
+    public function updateReport(Request $request)
+    {
+        #Obtenemos los datos del request
+        $data = $request->all();
+        #Buscamos el cliente por su huid
+        $client = Client::where('huid', $data['huid'])->first();
+        #Actualizamos el campo report
+        $result = $client->update
+        (
+            [
+                'report' => $data['report']
+            ]
+        );
+        #Devolvemos el resultado
+        if ($result) {
+            return response()->json($client, 200);
+        } else {
+            return response()->json(null, 400);
+        }
+    }
+    
     public function update(Request $request, Client $client)
     {
         $client->update($request->all());

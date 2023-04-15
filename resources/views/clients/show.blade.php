@@ -55,6 +55,9 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <th> Last Report </th><td> {{ $client->report }} </td>
+                                    </tr>
+                                    <tr>
                                         <th> Updated At </th><td> {{ $client->updated_at }} </td>
                                     </tr>
                                 </tbody>
