@@ -56,6 +56,17 @@ class HomeController extends Controller
             
         })->count();
 
-        return view('home',compact('numClients','activeClients','clientsWithDefaultManifest','now', 'minutes', 'clients','UpTimeclients_1d'));
+        //Obtener los 10 clientes más reciemtemte actualizados
+        $lastmodify_clients = Client::orderBy('updated_at', 'desc')->take(1)->get();
+        //Crear una colleccion de reportes
+        $reports = collect();
+        foreach ($lastmodify_clients as $key => $client) {
+            # code...
+            $report = json_decode($client->report);
+            //añade el reporte a la colleccion
+            $reports->push($report);
+        }
+
+        return view('home',compact('numClients','activeClients','clientsWithDefaultManifest','now', 'minutes', 'clients','UpTimeclients_1d','reports'));
     }
 }

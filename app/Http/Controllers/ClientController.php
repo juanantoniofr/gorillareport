@@ -43,7 +43,7 @@ class ClientController extends Controller
         return  view('clients.show_report')->with('client', $client)->with('report', $report);  
     }
 
-
+    
     public function register(Request $request)
     {
         

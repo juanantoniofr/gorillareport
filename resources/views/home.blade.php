@@ -7,24 +7,24 @@
     
         <h1>Dashboard</h1>
 
-            <div class="card-deck col-lg-3">
+        <div class="card-deck col-lg-3">
     
-        <!-- Activity -->
-        <div class="card mb-2">
-            <a href="{{ route('clients') }}" class="text-decoration-none">
-                <div class="card-header p-3 text-white bg-dark">
-                    <h2 class="card-title"><i class="fa-solid fa-computer"></i> Activity </h2>
-                </div>
-            </a>
+            <!-- Activity -->
+            <div class="card mb-2">
+                <a href="{{ route('clients') }}" class="text-decoration-none">
+                    <div class="card-header p-3 text-white bg-dark">
+                        <h2 class="card-title"><i class="fa-solid fa-computer"></i> Activity </h2>
+                    </div>
+                </a>
 
-            <div class="card-body">
-                <p class="card-text">{{ $numClients }} Registrados, <b>{{ $activeClients }} activos </b></p>
-                <a href="{{ route('clients') }}" class="btn btn-primary">Pc-Clients >></a>
+                <div class="card-body">
+                    <p class="card-text">{{ $numClients }} Registrados, <b>{{ $activeClients }} activos </b></p>
+                    <a href="{{ route('clients') }}" class="btn btn-primary">Pc-Clients >></a>
+                </div>
             </div>
-        </div>
     
-        <!-- Manifest status -->
-        <div class="card">
+            <!-- Manifest status -->
+            <div class="card">
             <a href="{{ route('clients') }}" class="text-decoration-none">
                 <div class="card-header p-3 text-white bg-danger">
                     <h2 class="card-title"><i class="fa-solid fa-file"></i></i> Manifest status </h2>
@@ -43,13 +43,13 @@
                     </li>
                 @endforeach
             </ul>
+            </div>
         </div>
-    </div>
 
-    <div class="card-deck col-lg-6">
+        <div class="card-deck col-lg-6">
 
-        <!-- UpTime Status -->
-        <div class="card">
+            <!-- UpTime Status -->
+            <div class="card mb-2">
                 <a href="" class="text-decoration-none">
                     <div class="card-header p-3 text-white bg-dark">
                         <h2 class="card-title"><i class="fa-solid fa-power-off"></i> UpTime </h2>
@@ -76,13 +76,30 @@
                     </p>
                 </div>
                 
-            </div>
-        </div>
+            </div><!-- card UpTime Status -->
 
+            <!-- Last 10 events -->
+            <div class="card">
+                <a href="" class="text-decoration-none">
+                    <div class="card-header p-3 text-white bg-dark">
+                        <h2 class="card-title"><i class="fa-solid fa-calendar"></i> Last 10 events </h2>
+                    </div>
 
-    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <ul class="list-group">
+                                @foreach($reports as $key => $report )
+                                    <li class="list-group-item">
+                                        <i class="fa-solid fa-angles-right"></i> {{ var_dump($report->lastExecution) }}
+                                @endforeach   
+                            </ul>   
+                        </p>
+                    </div>
+                </a>
+            </div><!-- card last 10 events -->
 
+        </div><!-- card-deck -->
 
-    </div>    
-</div>
+    </div><!-- row -->    
+</div><!-- container -->
 @endsection
