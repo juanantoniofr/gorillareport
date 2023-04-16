@@ -57,12 +57,12 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        Reports
+                                    Clients
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a href="{{ route('clients') }} " class="dropdown-item">PC-Clients</a>
+                                    <a href="{{ route('clients') }} " class="dropdown-item">PC's</a>
                                     <a href="#" class="dropdown-item">Events</a>
-                                    <a href="#" class="dropdown-item">Report</a>
+                                    <a href="{{ route('reports') }}" class="dropdown-item">Reports</a>
                                     
                                 </div>
                             </li>

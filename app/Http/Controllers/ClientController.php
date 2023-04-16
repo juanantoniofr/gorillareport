@@ -109,7 +109,15 @@ class ClientController extends Controller
         }
 
         // Actualizar report
-        $report_data = ['managed_install' => $data['report'], 'managed_uninstall' => '{}', 'managed_update' => '{}'];
+        $managed_install = '{}';
+        try {
+            $managed_install = $this->getContentReport(json_decode($data['report'])->lastExecution, 'managed_install');
+        }
+        catch(\Exception $e){
+            Log::error('ClientController@updateReport: Error al obtener managed_install: ' . $e->getMessage());
+        }
+
+        $report_data = ['managed_install' => json_encode($managed_install), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
         $report = new Report($report_data);
         $client->reports()->save($report);
 
@@ -139,4 +147,16 @@ class ClientController extends Controller
         return response()->json(null, 204);
     }
 
+
+    private function getContentReport($report, String $section){
+        try{
+            $content = $report->$section;
+        }
+        catch (\Exception $e){
+            Log::error('ClientController@getContentReport: Error al obtener el contenido de la sección ' . $section);
+            Log::error('ClientController@getContentReport: ' . $e->getMessage());
+        }
+        
+        return $content;
+    }
 }

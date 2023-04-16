@@ -27,10 +27,12 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // pc clients routes
-
 Route::get('clients', 'App\Http\Controllers\ClientController@index')->middleware('auth')->name('clients');
 Route::get('clients/{client}', 'App\Http\Controllers\ClientController@show')->middleware('auth')->name('clients.show');
 Route::get('clients/report/{client}', 'App\Http\Controllers\ClientController@show_report')->middleware('auth')->name('clients.show_report');
+
+// reports routes
+Route::get('reports', 'App\Http\Controllers\ReportController@index')->middleware('auth')->name('reports');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
