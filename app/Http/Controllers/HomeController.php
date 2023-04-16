@@ -70,8 +70,8 @@ class HomeController extends Controller
             //Crear un nuevo objeto con los atributos que necesitamos
             return (object)[
                 'name' => $client->name,
-                'managed_install' => $report->lastExecution->managed_install,
-                'lastExecution' => $report->lastExecution->startTime,
+                //'managed_install' => $report->lastExecution->managed_install,
+                //'lastExecution' => $report->lastExecution->startTime,
             ];
         });
 

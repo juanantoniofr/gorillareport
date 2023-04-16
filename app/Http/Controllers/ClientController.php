@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 use App\Models\Client;
+use App\Models\Report;
 use Carbon\Carbon;
 
 class ClientController extends Controller
@@ -46,16 +48,22 @@ class ClientController extends Controller
     
     public function register(Request $request)
     {
-        
-        $client = Client::updateOrCreate(
+        try{
+            
+            $client = Client::updateOrCreate(
 
-            ['huid' =>  request('huid')],
+                ['huid' =>  request('huid')],
         
-            ['ip' =>  request('ip'), 'name' => request('name')]
+                ['ip' =>  request('ip'), 'name' => request('name')]
         
-        );
+            );
 
-        return response()->json($client, 201);
+        }catch(\Exception $e){
+            Log::error('ClientController@register error al registrar cliente: ' . $e->getMessage());
+            return response()->json(['message' => 'ClientController@register: Error al registrar cliente'], 400);
+        }
+
+        return response()->json(['message' => 'ClientController@register: Cliente registrado exitosamente'], 200);
         
     }
 
@@ -64,45 +72,57 @@ class ClientController extends Controller
     */
     public function updateBasicInformation(Request $request)
     {
-        #Obtenemos los datos del request
-        $data = $request->all();
-        #Buscamos el cliente por su huid
-        $client = Client::where('huid', $data['huid'])->first();
-        #Actualizamos el campo information
-        $result = $client->update
-        (
-            [
-                'information' => $data['information']
-            ]
-        );
-        #Devolvemos el resultado
-        if ($result) {
-            return response()->json($client, 200);
-        } else {
-            return response()->json(null, 400);
+        try{
+            #Obtenemos los datos del request
+            $data = $request->all();
+            #Buscamos el cliente por su huid
+            $client = Client::where('huid', $data['huid'])->first();
+            #Actualizamos el campo information
+            $client->update
+            (
+                [
+                    'information' => $data['information']
+                ]
+            );
+            
+        }catch(\Exception $e){
+            Log::error('ClientController@updateBasicInformation: error al actualizar información básica:' . $e->getMessage());
+            return response()->json(['message' => 'ClientController@updateBasicInformation: Error al actualizar información'], 400);
         }
+        
+        return response()->json(['message' => 'ClientController@updateBasicInformation: Información actualizada exitosamente'], 200);
     }
 
     /* actualizamos el campo report del modelo client con los valores recibidos en el request */
     public function updateReport(Request $request)
     {
-        #Obtenemos los datos del request
-        $data = $request->all();
-        #Buscamos el cliente por su huid
-        $client = Client::where('huid', $data['huid'])->first();
-        #Actualizamos el campo report
-        $result = $client->update
-        (
-            [
-                'report' => $data['report']
-            ]
-        );
-        #Devolvemos el resultado
-        if ($result) {
-            return response()->json($client, 200);
-        } else {
-            return response()->json(null, 400);
+        try {
+            // Obtener los datos del request
+            $data = $request->all();
+
+            // Buscar el cliente por su huid
+            $client = Client::where('huid', $data['huid'])->first();
+
+            // Verificar que el cliente existe
+            if (!$client) {
+                throw new \Exception('ClientController@updateReport: El cliente no existe.');
         }
+
+        // Actualizar report
+        $report_data = ['managed_install' => $data['report'], 'managed_uninstall' => '{}', 'managed_update' => '{}'];
+        $report = new Report($report_data);
+        $client->reports()->save($report);
+
+        // Si todo salió bien, retornar una respuesta exitosa
+        return response()->json(['message' => 'ClientController@updateReport: Reporte creado exitosamente']);
+        } catch (\Exception $e) {
+            // Si hubo un error, registrar el error en el log de Laravel
+            Log::error($e->getMessage());
+
+            // Retornar una respuesta de error
+            return response()->json(['message' => 'ClientController@updateReport: Error al crear reporte']);
+        }
+    
     }
     
     public function update(Request $request, Client $client)
