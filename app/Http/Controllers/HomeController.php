@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+
 
 use App\Models\Client;
 use Carbon\Carbon;
@@ -56,17 +58,32 @@ class HomeController extends Controller
             
         })->count();
 
+        
         //Obtener los 10 clientes más reciemtemte actualizados
         $lastmodify_clients = Client::orderBy('updated_at', 'desc')->take(1)->get();
-        //Crear una colleccion de reportes
-        $reports = collect();
-        foreach ($lastmodify_clients as $key => $client) {
-            # code...
+        
+        // Crear una colleccion de clientes con los atributos que necesitamos
+        $managed_install = collect($lastmodify_clients)->map(function($client){
+            //Decodificar el reporte del cliente
             $report = json_decode($client->report);
-            //añade el reporte a la colleccion
-            $reports->push($report);
-        }
 
-        return view('home',compact('numClients','activeClients','clientsWithDefaultManifest','now', 'minutes', 'clients','UpTimeclients_1d','reports'));
+            //Crear un nuevo objeto con los atributos que necesitamos
+            return (object)[
+                'name' => $client->name,
+                'managed_install' => $report->lastExecution->managed_install,
+                'lastExecution' => $report->lastExecution->startTime,
+            ];
+        });
+
+        return view('home',compact('numClients','activeClients','clientsWithDefaultManifest','now', 'minutes', 'clients','UpTimeclients_1d','managed_install'));
+    }
+
+    private function getSuccessfull_install(Client $client){
+
+        //Obtener el reporte del cliente
+        $report = json_decode($client->report);
+        //Obtener lastExcution del reporte
+        $managed_install = $report->lastExecution->managed_install;
+        return $managed_install;
     }
 }

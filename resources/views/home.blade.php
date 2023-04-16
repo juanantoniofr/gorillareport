@@ -80,17 +80,23 @@
 
             <!-- Last 10 events -->
             <div class="card">
-                <a href="" class="text-decoration-none">
+                <a href="#" class="text-decoration-none">
                     <div class="card-header p-3 text-white bg-dark">
-                        <h2 class="card-title"><i class="fa-solid fa-calendar"></i> Last 10 events </h2>
+                        <h2 class="card-title"><i class="fa-solid fa-calendar"></i> Last events </h2>
                     </div>
 
                     <div class="card-body">
                         <p class="card-text">
                             <ul class="list-group">
-                                @foreach($reports as $key => $report )
-                                    <li class="list-group-item">
-                                        <i class="fa-solid fa-angles-right"></i> {{ var_dump($report->lastExecution) }}
+                                @foreach($managed_install as $key => $value )
+                                    <li class="list-group-item list-group-item-success">
+                                        <i class="fa-solid fa-angles-right"></i>
+                                        @if (count($value->managed_install) > 1)
+                                            {{ count($value->managed_install) }} successful installations on pc_client {{ $value->name }} at {{ $value->lastExecution }}
+                                            
+                                        @elseif (count($value->managed_install) == 1)
+                                            Successful installation of {{ $value->managed_install[0]->item }} on pc_client {{ $value->name }} at {{ $value->lastExecution }}
+                                        @endif 
                                 @endforeach   
                             </ul>   
                         </p>
