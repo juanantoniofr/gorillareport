@@ -39,10 +39,10 @@ class ClientController extends Controller
 
     public function show_report(Client $client)
     {
-        #decodificar el campo report
-        $report = json_decode($client->report);
+        #obtenemos el último reporte del cliente
+        $last_report = $client->reports()->latest()->first();
 
-        return  view('clients.show_report')->with('client', $client)->with('report', $report);  
+        return  view('clients.show_report')->with('client', $client)->with('last_report', json_decode($last_report));  
     }
 
     

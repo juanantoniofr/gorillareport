@@ -60,13 +60,13 @@
                                     <tr>
                                         <th> Last Report: startTime </th>
                                         <td>
-                                            {{ $report['lastExecution']['startTime'] }}
+                                            {{ $report['lastExecution']['startTime'] ?? '' }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th> Last Report: endTime </th>
                                         <td>
-                                            {{ $report['lastExecution']['endTime'] }}
+                                            {{ $report['lastExecution']['endTime'] ??''}}
                                         </td>
                                     <tr>
                                         <th> Updated At </th><td> {{ $client->updated_at }} </td>
