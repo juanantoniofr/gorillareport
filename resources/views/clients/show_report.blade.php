@@ -29,18 +29,27 @@
                 
                 <div class="card-body">
                     <h3 class="card-title">Managed Install</h3>
+                
                     <p class="card-text">
-                    @if(isset($last_report))
-                        @foreach($last_report as $key => $value)
-                            <span><b>{{$key}}:</b> {{ $value }}</span>
+                        @if(isset($last_report))
+                            <ul class="list-group list-group-flush">
+                            @foreach(json_decode($last_report->managed_install) as $managed_install)
+                                <li class="list-group-item">
+                                <b>display_name:</b> {{ $managed_install->DisplayName }}
+                                <br />  
+                                
+                                    <b>HASH:</b> {{ $managed_install->Installer->Hash }}
+                                </li>
+                            
+                            @endforeach
+                            </ul>
                             <br />
-                        @endforeach
+                            {{ var_dump($last_report->managed_install)}}
+                        @else
+                            <p>No Managed Install</p>
+                        @endif
+                    </p><!-- end card-text Managed_install-->
 
-                        
-                    @else
-                        <p>No Managed Install</p>
-                    @endif
-                    </p>
                     
                 </div>
             </div>

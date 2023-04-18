@@ -42,7 +42,7 @@ class ClientController extends Controller
         #obtenemos el último reporte del cliente
         $last_report = $client->reports()->latest()->first();
 
-        return  view('clients.show_report')->with('client', $client)->with('last_report', json_decode($last_report));  
+        return  view('clients.show_report')->with('client', $client)->with('last_report', $last_report);  
     }
 
     
@@ -111,13 +111,15 @@ class ClientController extends Controller
         // Actualizar report
         $managed_install = '{}';
         try {
-            $managed_install = $this->getContentReport(json_decode($data['report'])->lastExecution, 'managed_install');
+            Log::error('ClientController@updateReport: ' . $data['report']);
+            
+            $managed_install = $this->getContentReport(json_decode($data['report']), 'managed_installs');
         }
         catch(\Exception $e){
             Log::error('ClientController@updateReport: Error al obtener managed_install: ' . $e->getMessage());
         }
 
-        $report_data = ['managed_install' => json_encode($managed_install), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
+        $report_data = ['managed_install' => json_encode($managed_installs), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
         $report = new Report($report_data);
         $client->reports()->save($report);
 
