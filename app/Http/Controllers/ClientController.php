@@ -111,15 +111,15 @@ class ClientController extends Controller
         // Actualizar report
         $managed_install = '{}';
         try {
-            Log::error('ClientController@updateReport: ' . $data['report']);
+            Log::error('ClientController@updateReport content $data[\'report\'] : ' . $data['report']);
             
-            $managed_install = $this->getContentReport(json_decode($data['report']), 'managed_installs');
+            //$managed_install = $this->getContentReport(json_decode($data['report']), 'global_info');
         }
         catch(\Exception $e){
             Log::error('ClientController@updateReport: Error al obtener managed_install: ' . $e->getMessage());
         }
 
-        $report_data = ['managed_install' => json_encode($managed_installs), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
+        $report_data = ['managed_install' => json_encode($data['report']), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
         $report = new Report($report_data);
         $client->reports()->save($report);
 
