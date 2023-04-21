@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 
 
 use App\Models\Client;
+use App\Models\Event;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 
@@ -62,28 +63,12 @@ class HomeController extends Controller
         //Obtener los 10 clientes más reciemtemte actualizados
         $lastmodify_clients = Client::orderBy('updated_at', 'desc')->take(1)->get();
         
-        // Crear una colleccion de clientes con los atributos que necesitamos
-        $managed_install = collect($lastmodify_clients)->map(function($client){
-            //Decodificar el reporte del cliente
-            $report = json_decode($client->report);
+        //events
+        $events = Event::all(); 
+        
 
-            //Crear un nuevo objeto con los atributos que necesitamos
-            return (object)[
-                'name' => $client->name,
-                //'managed_install' => $report->lastExecution->managed_install,
-                //'lastExecution' => $report->lastExecution->startTime,
-            ];
-        });
-
-        return view('home',compact('numClients','activeClients','clientsWithDefaultManifest','now', 'minutes', 'clients','UpTimeclients_1d','managed_install'));
+        return view('home',compact('numClients','activeClients','clientsWithDefaultManifest','now', 'minutes', 'clients','UpTimeclients_1d','events'));
     }
 
-    private function getSuccessfull_install(Client $client){
-
-        //Obtener el reporte del cliente
-        $report = json_decode($client->report);
-        //Obtener lastExcution del reporte
-        $managed_install = $report->lastExecution->managed_install;
-        return $managed_install;
-    }
+    
 }

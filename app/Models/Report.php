@@ -31,4 +31,5 @@ class Report extends Model
     }
 
 
+
 }

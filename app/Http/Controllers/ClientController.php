@@ -119,15 +119,29 @@ class ClientController extends Controller
             //***************/
 
             // Obtener número de instalaciones successfull
+            $managed_installs_successfull = 23;
+            
             foreach ($managed_installs as $install) {
-                if (isset($install->installing_ps1_block->command_output)) {
-                    $command_output = $install->installing_ps1_block->command_output;
+                $installing_ps1_block = $install['installing_ps1_block'];
+                if (isset( $installing_ps1_block['command_output'])) {
+                    
+                    $command_output = $installing_ps1_block['command_output'];
+                    
                     // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
-                    $managed_installs_successfull = count(array_filter($command_output, function($str) {
-                        return strpos($str, "SUCCESSFUL") !== false;
-                    }));
+                    //$managed_installs_successfull = count(array_filter($command_output, function($str) {
+                    //    return strpos($str, "SUCCESSFUL") !== false;
+                    //}));
                 }
             }
+
+            //El primer parámetro es un array vacío, lo que significa que no se especifican las condiciones de búsqueda para actualizar o crear la instancia    
+            $client->report->event->updateOrCreate(
+                [],
+                [
+                    'successful' => $managed_installs_successfull,
+                ]
+            );
+            
             
             
             

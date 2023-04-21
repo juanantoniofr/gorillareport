@@ -88,17 +88,10 @@
                     <div class="card-body">
                         <p class="card-text">
                             <ul class="list-group">
-                                @foreach($managed_install as $key => $value )
+                                @foreach($events as $event )
                                     <li class="list-group-item list-group-item-success">
-                                        <i class="fa-solid fa-angles-right"></i>
-                                        @if (isset($value->managed_install))
-                                            @if (count($value->managed_install) > 1)
-                                                {{ count($value->managed_install) }} successful installations on pc_client {{ $value->name }} at {{ $value->lastExecution }}
-                                            
-                                            @elseif (count($value->managed_install) == 1)
-                                                Successful installation of {{ $value->managed_install[0]->item }} on pc_client {{ $value->name }} at {{ $value->lastExecution }}
-                                            @endif
-                                        @endif 
+                                        Successful installation {{ $event->successful }} on pc_client {{ $event->report->client->name }} at {{ $event->updated_at }}
+                                    </li>
                                 @endforeach   
                             </ul>   
                         </p>
