@@ -25,5 +25,10 @@ class Report extends Model
         return $this->belongsTo(Client::class);
     }
     
+    public function event()
+    {
+        return $this->hasOne(Event::class);
+    }
+
 
 }

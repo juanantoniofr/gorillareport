@@ -9,8 +9,8 @@
                     <div class="card-header"><h1>Client {{ $client->name }}</h1></div>
                     <div class="card-body">
 
-                        <a href="{{ url('/clients') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
-                        <a href="{{ url('/clients/report/' . $client->id) }}" title="View Report"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View Report</button></a>
+                        <a href="{{ url('/clients') }}" title="Back"><button class="btn btn-warning btn-lg"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url('/clients/report/' . $client->id) }}" title="View Report"><button class="btn btn-info btn-lg"><i class="fa fa-eye" aria-hidden="true"></i> View Report</button></a>
                         <!--
                         <a href="{{ url('/clients/' . $client->id . '/edit') }}" title="Edit Client"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
                         -->
@@ -21,7 +21,7 @@
                         ]) !!}
                             {!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete', array(
                                     'type' => 'submit',
-                                    'class' => 'btn btn-danger btn-sm',
+                                    'class' => 'btn btn-danger btn-lg',
                                     'title' => 'Delete Client',
                                     'onclick'=>'return confirm("Confirm delete?")'
                             ))!!}
@@ -30,7 +30,8 @@
                         <br/>
 
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table caption-top">
+                                <caption><h3>Basic Computer information.</h3></caption>
                                 <tbody>
                                     <tr>
                                         <th>ID</th><td>{{ $client->id }}</td>
@@ -57,17 +58,38 @@
                                             @endforeach
                                         </td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table caption-top">
+                                <caption><h3>Basic information about the Gorilla client.</h3></caption>
+                                <tbody>
                                     <tr>
-                                        <th> Last Report: startTime </th>
+                                        <th> Catalog </th>
                                         <td>
-                                            {{ $report['lastExecution']['startTime'] ?? '' }}
+                                            {{ implode(",", json_decode($client->gorilla_global_info)->Catalog) }}
+                                        </td>
+                                    <tr>
+                                    <tr>
+                                        <th> Manifest </th>
+                                        <td>
+                                            {{ json_decode($client->gorilla_global_info)->Manifest }}
+                                        </td>
+
+                                    </tr>
+                                    <tr>    
+                                        <th> Last Execution StartTime </th>
+                                        <td>
+                                            {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_StartTime)) ?? '' }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th> Last Report: endTime </th>
+                                        <th> Last Execution EndTime </th>
                                         <td>
-                                            {{ $report['lastExecution']['endTime'] ??''}}
+                                            {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_EndTime)) ?? '' }}
                                         </td>
+                                    </tr>
                                     <tr>
                                         <th> Updated At </th><td> {{ $client->updated_at }} </td>
                                     </tr>
@@ -80,4 +102,5 @@
             </div>
         </div>
     </div>
+ 
 @endsection

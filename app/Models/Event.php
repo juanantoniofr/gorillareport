@@ -7,20 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kyslik\ColumnSortable\Sortable;
 
-class Client extends Model
+class Event extends Model
 {
     use HasFactory;
     use Sortable;
     
     protected $fillable = [
-        'huid', 'name','ip', 'information', 'gorilla_global_info'
+        'successful', 'warning','error'
     ];
     
-    public $sortable = ['name', 'ip', 'updated_at'];
+    public $sortable = ['successful', 'warning', 'error', 'updated_at'];
     
 
     public function report()
     {
-        return $this->hasOne(Report::class);
+        return $this->belongsTo(Report::class);
     }
 }

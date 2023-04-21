@@ -31,18 +31,12 @@ class ClientController extends Controller
  
     public function show(Client $client)
     {
-        #decodificar el campo report
-        $report = json_decode($client->report, true);
-
-        return  view('clients.show')->with('client', $client)->with('report', $report);  
+        return  view('clients.show')->with('client', $client);  
     }
 
     public function show_report(Client $client)
     {
-        #obtenemos el último reporte del cliente
-        $last_report = $client->reports()->latest()->first();
-
-        return  view('clients.show_report')->with('client', $client)->with('last_report', $last_report);  
+        return  view('clients.show_report')->with('client', $client);  
     }
 
     
@@ -99,40 +93,74 @@ class ClientController extends Controller
         try {
             // Obtener los datos del request
             $data = $request->all();
-
+        
             // Buscar el cliente por su huid
-            $client = Client::where('huid', $data['huid'])->first();
-
-            // Verificar que el cliente existe
-            if (!$client) {
-                throw new \Exception('ClientController@updateReport: El cliente no existe.');
-        }
-
-        // Actualizar report
-        $managed_install = '{}';
-        try {
-            Log::error('ClientController@updateReport content $data[\'report\'] : ' . $data['report']);
+            $client = Client::where('huid', $data['huid'])->firstOrFail();
+        
             
-            //$managed_install = $this->getContentReport(json_decode($data['report']), 'global_info');
-        }
-        catch(\Exception $e){
-            Log::error('ClientController@updateReport: Error al obtener managed_install: ' . $e->getMessage());
-        }
+            // Obtener sección managed_installs
+            $managed_install = '{}';
+            try {
+                Log::error('ClientController@updateReport content $data[\'report\'] : ' . $data['report']);
+                $managed_installs = $this->getContentReport(json_decode($data['report'], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PARTIAL_OUTPUT_ON_ERROR|JSON_THROW_ON_ERROR, 512), 'managed_installs');
+            }
+            catch(\Exception $e){
+                Log::error('ClientController@updateReport: Error al obtener managed_install');
+                // Retornar una respuesta de error
+                return response()->json(['message' => 'ClientController@updateReport: Error al obtener managed_install']);
+            }
 
-        $report_data = ['managed_install' => json_encode($data['report']), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
-        $report = new Report($report_data);
-        $client->reports()->save($report);
+            // Actualizar report
+            $report_data = ['managed_install' => json_encode($managed_installs), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
+            $client->report()->updateOrCreate($report_data);
+            
+            //***************/
+            // Generar evento a partir del reporte
+            //***************/
 
-        // Si todo salió bien, retornar una respuesta exitosa
-        return response()->json(['message' => 'ClientController@updateReport: Reporte creado exitosamente']);
-        } catch (\Exception $e) {
+            // Obtener número de instalaciones successfull
+            foreach ($managed_installs as $install) {
+                if (isset($install->installing_ps1_block->command_output)) {
+                    $command_output = $install->installing_ps1_block->command_output;
+                    // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
+                    $managed_installs_successfull = count(array_filter($command_output, function($str) {
+                        return strpos($str, "SUCCESSFUL") !== false;
+                    }));
+                }
+            }
+            
+            
+            
+
+
+            // Actualizar client
+            // Sección global_info
+            try{
+                $global_info = $this->getContentReport(json_decode($data['report'], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PARTIAL_OUTPUT_ON_ERROR|JSON_THROW_ON_ERROR, 512), 'global_info');
+            }
+            catch(\Exception $e){
+                Log::error('ClientController@updateReport: Error al obtener global_info');
+                // Retornar una respuesta de error
+                return response()->json(['message' => 'ClientController@updateReport: Error al obtener global_info']);
+            }
+
+            $client->update
+            (
+                [
+                    'gorilla_global_info' => json_encode($global_info),
+                ]
+            );
+            
+            // Si todo salió bien, retornar una respuesta exitosa
+            return response()->json(['message' => 'ClientController@updateReport: Reporte creado exitosamente']);
+        }
+        catch (\Exception $e) {
             // Si hubo un error, registrar el error en el log de Laravel
             Log::error($e->getMessage());
-
+        
             // Retornar una respuesta de error
-            return response()->json(['message' => 'ClientController@updateReport: Error al crear reporte']);
+            return response()->json(['message' => 'ClientController@updateReport error ' .$e->getMessage()]);
         }
-    
     }
     
     public function update(Request $request, Client $client)
@@ -152,7 +180,7 @@ class ClientController extends Controller
 
     private function getContentReport($report, String $section){
         try{
-            $content = $report->$section;
+            $content = $report[$section];
         }
         catch (\Exception $e){
             Log::error('ClientController@getContentReport: Error al obtener el contenido de la sección ' . $section);
