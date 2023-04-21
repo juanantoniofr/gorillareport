@@ -70,7 +70,7 @@ class ClientController extends Controller
             #Obtenemos los datos del request
             $data = $request->all();
             #Buscamos el cliente por su huid
-            $client = Client::where('huid', $data['huid'])->first();
+            $client = Client::where('huid', $data['huid'])->firstOrFail();
             #Actualizamos el campo information
             $client->update
             (
@@ -81,7 +81,7 @@ class ClientController extends Controller
             
         }catch(\Exception $e){
             Log::error('ClientController@updateBasicInformation: error al actualizar información básica:' . $e->getMessage());
-            return response()->json(['message' => 'ClientController@updateBasicInformation: Error al actualizar información'], 400);
+            return response()->json(['message' => 'ClientController@updateBasicInformation: Error al actualizar información básica: ' . $e->getMessage()]);
         }
         
         return response()->json(['message' => 'ClientController@updateBasicInformation: Información actualizada exitosamente'], 200);
@@ -112,7 +112,9 @@ class ClientController extends Controller
 
             // Actualizar report
             $report_data = ['managed_install' => json_encode($managed_installs), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
-            $client->report()->updateOrCreate($report_data);
+            $client->report()->updateOrCreate(
+                ['client_id' => $client->id],
+                $report_data);
             
             //***************/
             // Generar evento a partir del reporte
@@ -121,21 +123,21 @@ class ClientController extends Controller
             // Obtener número de instalaciones successfull
             $managed_installs_successfull = 23;
             
-            foreach ($managed_installs as $install) {
+            /*foreach ($managed_installs as $install) {
                 $installing_ps1_block = $install['installing_ps1_block'];
                 if (isset( $installing_ps1_block['command_output'])) {
                     
-                    $command_output = $installing_ps1_block['command_output'];
+                    //$command_output = $installing_ps1_block['command_output'];
                     
                     // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
                     //$managed_installs_successfull = count(array_filter($command_output, function($str) {
                     //    return strpos($str, "SUCCESSFUL") !== false;
                     //}));
                 }
-            }
+            }*/
 
             //El primer parámetro es un array vacío, lo que significa que no se especifican las condiciones de búsqueda para actualizar o crear la instancia    
-            $client->report->event->updateOrCreate(
+            $client->report->event()->updateOrCreate(
                 [],
                 [
                     'successful' => $managed_installs_successfull,
