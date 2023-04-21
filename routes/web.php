@@ -34,6 +34,9 @@ Route::get('clients/report/{client}', 'App\Http\Controllers\ClientController@sho
 // reports routes
 Route::get('reports', 'App\Http\Controllers\ReportController@index')->middleware('auth')->name('reports');
 
+// events routes
+Route::get('events', 'App\Http\Controllers\EventController@index')->middleware('auth')->name('events');
+
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

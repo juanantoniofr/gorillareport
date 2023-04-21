@@ -3,7 +3,7 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-md-12 py-3">
-            <h1>Report List</h1>
+            <h1>Event List</h1>
         </div>
         <div class="col-md-12">
             <form method="GET">
@@ -27,17 +27,21 @@
                     <tr class="table-dark">
                         <!-- <th class="col-1">ID</th> -->
                         <th class="p-3" >@sortablelink('updated_at')</th>
-                        <th class="p-3" >@sortablelink('client.name','Hostname')</th>
+                        <th class="p-3" >@sortablelink('hostname', 'Hostname')</th>
+                        <th class="p-3">@sortablelink('successful','Count successful')</th>
                         <th class="p-3">Report</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($reports as $report)
+                    @foreach($events as $event)
                     <tr>
-                        <td class="p-3">{{$report->updated_at}}</td>
-                        <td class="p-3"><a href="{{ route('clients.show',$report->client->id) }}"> {{$report->client->name}} </a></td>
+                        <td class="p-3">{{$event->updated_at}}</td>
+                        <td class="p-3"><a href="{{ route('clients.show',$event->report->client->id) }}"> {{$event->report->client->name}} </a></td>
                         <td class="p-3">
-                            <a href="{{ route('clients.show_report',$report->client) }}"> View last report</a>
+                            {{ $event->successful }} 
+                        </td>
+                        <td class="p-3">
+                            <a href="{{ route('clients.show_report',$event->report->client) }}"> View report</a>
                         </td>
                     </tr>
                     @endforeach

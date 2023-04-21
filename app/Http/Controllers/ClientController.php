@@ -121,24 +121,26 @@ class ClientController extends Controller
             //***************/
 
             // Obtener número de instalaciones successfull
-            $managed_installs_successfull = 23;
+            $managed_installs_successfull = 0;
             
-            /*foreach ($managed_installs as $install) {
+            foreach ($managed_installs as $install) {
                 $installing_ps1_block = $install['installing_ps1_block'];
+                Log::error('ClientController@updateReport: $installing_ps1_block: ' . count($installing_ps1_block));
                 if (isset( $installing_ps1_block['command_output'])) {
                     
-                    //$command_output = $installing_ps1_block['command_output'];
-                    
+                    $command_output = $installing_ps1_block['command_output'];
+                    Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
                     // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
-                    //$managed_installs_successfull = count(array_filter($command_output, function($str) {
-                    //    return strpos($str, "SUCCESSFUL") !== false;
-                    //}));
+                    $managed_installs_successfull = $managed_installs_successfull + count(array_filter($command_output, function($str) {
+                        return strpos($str, "SUCCESSFUL") !== false;
+                    }));
                 }
-            }*/
+                Log::error('ClientController@updateReport: $managed_installs_successfull: ' . $managed_installs_successfull);
+            }
 
             //El primer parámetro es un array vacío, lo que significa que no se especifican las condiciones de búsqueda para actualizar o crear la instancia    
             $client->report->event()->updateOrCreate(
-                [],
+                ['report_id' => $client->report->id],
                 [
                     'successful' => $managed_installs_successfull,
                 ]

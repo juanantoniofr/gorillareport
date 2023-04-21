@@ -22,31 +22,6 @@
                     <a href="{{ route('clients') }}" class="btn btn-primary">Pc-Clients >></a>
                 </div>
             </div>
-    
-            <!-- Manifest status -->
-            <div class="card">
-            <a href="{{ route('clients') }}" class="text-decoration-none">
-                <div class="card-header p-3 text-white bg-danger">
-                    <h2 class="card-title"><i class="fa-solid fa-file"></i></i> Manifest status </h2>
-                </div>
-            </a>
-
-            <div class="card-body">
-                <p class="card-text">
-                  Equipos con manifest igual a <b>default_manifest</b>
-                </p>
-            </div>
-            <ul class="list-group list-group-flush">
-                @foreach($clientsWithDefaultManifest as $clientWithDefaultManifest)
-                    <li class="list-group-item">
-                    <i class="fa-solid fa-angles-right"></i> {{ $clientWithDefaultManifest->name }} ( {{ $clientWithDefaultManifest->ip }})
-                    </li>
-                @endforeach
-            </ul>
-            </div>
-        </div>
-
-        <div class="card-deck col-lg-6">
 
             <!-- UpTime Status -->
             <div class="card mb-2">
@@ -59,17 +34,17 @@
                 <div class="card-body">
                     <p class="card-text text-center">
                         
-                        <a class="btn btn-danger disabled" href="">
+                        <a class="btn btn-danger btn-sm" href="">
 				            <span class="bigger-150">{{ $UpTimeclients_7dm  ?? 0 }}</span><br>
 				            7 <span data-i18n="date.day_plural">Days</span> +
 			            </a>
 
-                        <a class="btn btn-warning" href="">
+                        <a class="btn btn-warning btn-sm" href="">
 				            <span class="bigger-150">{{ $UpTimeclients_7d  ?? 0 }}</span><br>
 				            &lt; 7 <span data-i18n="date.day_plural">Days</span>
 			            </a>
 
-                        <a class="btn btn-success" href="">
+                        <a class="btn btn-success btn-sm" href="">
                             <span class="bigger-150">{{ $UpTimeclients_1d }}</span><br>
                             &lt; 1 <span data-i18n="date.day">Day</span>
 			            </a>
@@ -78,6 +53,9 @@
                 
             </div><!-- card UpTime Status -->
 
+        </div>
+
+        <div class="card-deck col-lg-9">
             <!-- Last 10 events -->
             <div class="card">
                 <a href="#" class="text-decoration-none">
@@ -87,11 +65,15 @@
 
                     <div class="card-body">
                         <p class="card-text">
-                            <ul class="list-group">
+                            <ul class="list-group list-group-flush">
                                 @foreach($events as $event )
-                                    <li class="list-group-item list-group-item-success">
-                                        Successful installation {{ $event->successful }} on pc_client {{ $event->report->client->name }} at {{ $event->updated_at }}
-                                    </li>
+                                    <a href="{{ route('clients.show_report', $event->report->client) }}" class="text-decoration-none">
+                                        <li class="list-group-item">
+                                            <span class="text-success">
+                                                <i class="fa-solid fa-check"></i> {{ $event->report->client->name }}:  {{ $event->successful }} Successful installations  at {{ $event->updated_at }}
+                                            </span>
+                                        </li>
+                                    </a>
                                 @endforeach   
                             </ul>   
                         </p>

@@ -22,28 +22,28 @@
     </div>
     
     <div class="col-md-12 table-responsive"> 
-        <table class="table table-dark table-hover table-bordered  align-middle">
+        <table class="table align-middle">
             <thead>
-                <tr class="table-light">
+                <tr class="table-dark">
                     <!-- <th class="col-1">ID</th> -->
-                    <th class="py-3" >@sortablelink('updated_at')</th>
-                    <th class="py-3" >@sortablelink('name')</th>
-                    <th class="py-3">@sortablelink('ip')</th>
-                    <th class="py-3">Information</th>
+                    <th class="p-3" >@sortablelink('updated_at')</th>
+                    <th class="p-3" >@sortablelink('name','Hostname')</th>
+                    <th class="p-3">@sortablelink('ip')</th>
+                    <th class="p-3">Information</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($clients as $client)
                 <tr>
-                    <td class="py-3">{{$client->updated_at}}</td>
-                    <td class="py-3"><a href="{{ route('clients.show',$client->id) }}"> {{$client->name}} </a></td>
-                    <td class="py-3">
+                    <td class="p-3">{{$client->updated_at}}</td>
+                    <td class="p-3"><a href="{{ route('clients.show',$client->id) }}"> {{$client->name}} </a></td>
+                    <td class="p-3">
                         <?php $ips = json_decode($client->ip, true) ?>
                         {{ $ips }}
                         {{ $client->ip }}
                         
                     </td>
-                    <td class="py-3">
+                    <td class="p-3">
                         @foreach(json_decode($client->information, true) as $key => $value)
                             <span><b>{{$key}}:</b></span><br />
                             @foreach($value as $key2 => $value2)

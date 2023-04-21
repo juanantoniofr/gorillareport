@@ -37,12 +37,6 @@ class HomeController extends Controller
         $minutes = Carbon::now()->subMinutes(15)->format('Y-m-d H:i:s');
         $activeClients = Client::whereDate('updated_at', '>=', Carbon::now()->subMinutes(15) )->count();
 
-        //manifest_status
-        $clientsWithDefaultManifest = $clients->filter(function($client, $key){
-            $information = json_decode($client->information);
-            if (isset($information->Manifest) && $information->Manifest == "default_manifest")
-                return true;
-        });
 
         //UpTime < 1d
         $UpTimeclients_1d = $clients->filter(function($client, $key){
@@ -67,7 +61,7 @@ class HomeController extends Controller
         $events = Event::all(); 
         
 
-        return view('home',compact('numClients','activeClients','clientsWithDefaultManifest','now', 'minutes', 'clients','UpTimeclients_1d','events'));
+        return view('home',compact('numClients','activeClients','now', 'minutes', 'clients','UpTimeclients_1d','events'));
     }
 
     

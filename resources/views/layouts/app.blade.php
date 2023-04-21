@@ -14,6 +14,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -61,7 +62,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a href="{{ route('clients') }} " class="dropdown-item">PC's</a>
-                                    <a href="#" class="dropdown-item">Events</a>
+                                    <a href="{{ route('events') }}" class="dropdown-item">Events</a>
                                     <a href="{{ route('reports') }}" class="dropdown-item">Reports</a>
                                     
                                 </div>

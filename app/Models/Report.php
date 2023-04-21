@@ -19,7 +19,7 @@ class Report extends Model
         'managed_update'
     ];
 
-    public $sortable = ['managed_install', 'managed_uninstall', 'managed_update', 'updated_at'];
+    public $sortable = ['updated_at','id'];
 
     public function client()
     {
@@ -30,6 +30,13 @@ class Report extends Model
     {
         return $this->hasOne(Event::class);
     }
+
+    /*public function hostnameSortable($query, $direction)
+    {
+        return $query->join('clients', 'clients.id', '=', 'reports.client_id')
+                    ->orderBy('name', $direction)
+                    ->select('clients.*');
+    }*/
 
 
 
