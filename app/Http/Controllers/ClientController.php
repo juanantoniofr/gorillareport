@@ -75,7 +75,7 @@ class ClientController extends Controller
             $client->update
             (
                 [
-                    'information' => $data['information']
+                    'information' => $data['report']
                 ]
             );
             
@@ -116,6 +116,8 @@ class ClientController extends Controller
                 ['client_id' => $client->id],
                 $report_data);
             
+            
+            
             //***************/
             // Generar evento a partir del reporte
             //***************/
@@ -138,7 +140,6 @@ class ClientController extends Controller
                 Log::error('ClientController@updateReport: $managed_installs_successfull: ' . $managed_installs_successfull);
             }
 
-            //El primer parámetro es un array vacío, lo que significa que no se especifican las condiciones de búsqueda para actualizar o crear la instancia    
             $client->report->event()->updateOrCreate(
                 ['report_id' => $client->report->id],
                 [
