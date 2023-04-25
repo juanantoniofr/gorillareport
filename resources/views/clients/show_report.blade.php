@@ -27,7 +27,7 @@
                             </li>
                             <li class="list-group-item"><b>Client manifest:</b>
                                 @if (isset(json_decode($client->gorilla_global_info)->Manifest))
-                                    {{ implode(",", json_decode($client->gorilla_global_info)->Manifest) }}
+                                    {{ json_decode($client->gorilla_global_info)->Manifest }}
                                 @else
                                     <span class="badge bg-danger">No information available</span>
                                 @endif
@@ -60,12 +60,16 @@
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="heading_{{$key}}">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{$key}}" aria-expanded="true" aria-controls="collapse_{{$key}}">
-                                            @if (in_array(true, array_map(function($str) {
-                                                        return strpos($str, "FAILED") !== false;
-                                                        }, $managed_install->installing_ps1_block->command_output)))
-                                                <span class="text-danger"><b>Task name:</b> {{ $managed_install->task_name }} 
+                                            @if (isset($managed_install->installing_ps1_block->command_output))
+                                                @if (in_array(true, array_map(function($str) {
+                                                    return strpos($str, "FAILED") !== false;
+                                                    }, $managed_install->installing_ps1_block->command_output)))
+                                                    <span class="text-danger"><b>Task name:</b> {{ $managed_install->task_name }} 
+                                                @else
+                                                    <span class="text-success"><b>Task name:</b> {{ $managed_install->task_name }}
+                                                @endif
                                             @else
-                                                <span class="text-success"><b>Task name:</b> {{ $managed_install->task_name }}
+                                                <span class="text-info"><b>Task name:</b> {{ $managed_install->task_name }}
                                             @endif
                                         </span>                                            
                                         </button>
@@ -73,14 +77,14 @@
 
                                     <div id="collapse_{{$key}}" class="accordion-collapse collapse" aria-labelledby="heading_{{$key}}" data-bs-parent="#managed_installs_acordeon">
                                         <div class="accordion-body">
-                                            @if ( $managed_install->installing_ps1_block->hash_error ) 
-                                                <b>HASH error:</b> <span class="text-danger">{{ var_dump($managed_install->installing_ps1_block->hash_error)}}</span>
+                                            @if ( isset($managed_install->installing_ps1_block->hash_error)  && !empty($managed_install->installing_ps1_block->hash_error)) 
+                                                <b>HASH error:</b> <span class="text-danger">{{ implode(",",$managed_install->installing_ps1_block->hash_error) }}</span>
                                             @else 
                                                 <b>HASH:</b> <span class="text-success">correct!!</span>
                                             @endif
                                             <br />
-                                            @if ( $managed_install->installing_ps1_block->download_error ) 
-                                                <b>Download error:</b> <span class="text-danger">{{ var_dump($managed_install->installing_ps1_block->download_error)}}</span>
+                                            @if ( isset($managed_install->installing_ps1_block->download_error) && !empty($managed_install->installing_ps1_block->download_error) ) 
+                                                <b>Download error:</b> <span class="text-danger">{{ implode(",",$managed_install->installing_ps1_block->download_error)}}</span>
                                             @else 
                                                 <b>Download:</b> <span class="text-success">correct!!</span>
                                             @endif
@@ -110,7 +114,7 @@
                                             
                                             
                                             
-                                            @if ( $managed_install->installing_ps1_block->command_output ) 
+                                            @if ( isset($managed_install->installing_ps1_block->command_output) ) 
                                                 <b>Command output:</b>    
                                                     <p class="ms-4">
                                                         @foreach($managed_install->installing_ps1_block->command_output as $command_output)

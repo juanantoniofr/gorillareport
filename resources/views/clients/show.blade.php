@@ -83,7 +83,7 @@
                                         <th> Manifest </th>
                                         <td>
                                             @if (isset($client->gorilla_global_info))
-                                                {{ implode(",", json_decode($client->gorilla_global_info)->Manifest) }}
+                                                {{ json_decode($client->gorilla_global_info)->Manifest }}
                                             @else
                                                 <span class="badge bg-danger">No information available.</span>
                                             @endif

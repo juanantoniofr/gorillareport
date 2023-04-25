@@ -75,7 +75,7 @@ class ClientController extends Controller
             $client->update
             (
                 [
-                    'information' => $data['information']
+                    'information' => $data['report']
                 ]
             );
             
