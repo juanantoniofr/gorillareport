@@ -116,6 +116,8 @@ class ClientController extends Controller
                 ['client_id' => $client->id],
                 $report_data);
             
+            
+            
             //***************/
             // Generar evento a partir del reporte
             //***************/
@@ -137,12 +139,31 @@ class ClientController extends Controller
                 }
                 Log::error('ClientController@updateReport: $managed_installs_successfull: ' . $managed_installs_successfull);
             }
+            
+            // Obtener número de instalaciones failed
+            $managed_installs_failed = 0;
 
-            //El primer parámetro es un array vacío, lo que significa que no se especifican las condiciones de búsqueda para actualizar o crear la instancia    
+            foreach ($managed_installs as $install) {
+                $installing_ps1_block = $install['installing_ps1_block'];
+                Log::error('ClientController@updateReport: $installing_ps1_block: ' . count($installing_ps1_block));
+                if (isset( $installing_ps1_block['command_output'])) {
+                    
+                    $command_output = $installing_ps1_block['command_output'];
+                    Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
+                    // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
+                    $managed_installs_failed = $managed_installs_failed + count(array_filter($command_output, function($str) {
+                        return strpos($str, "FAILED") !== false;
+                    }));
+                }
+                Log::error('ClientController@updateReport: $managed_installs_failed: ' . $managed_installs_failed);
+            }
+
+            // Actualizar evento
             $client->report->event()->updateOrCreate(
                 ['report_id' => $client->report->id],
                 [
                     'successful' => $managed_installs_successfull,
+                    'error' => $managed_installs_failed,
                 ]
             );
             
