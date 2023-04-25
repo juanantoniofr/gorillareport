@@ -18,10 +18,34 @@
                             <li class="list-group-item"><b>Client Name:</b> {{ $client->name }}</li>
                             <li class="list-group-item"><b>Client IP:</b> {{ $client->ip }}</li>
                             <li class="list-group-item"><b>Client HUID:</b> {{ $client->huid }}</li>
-                            <li class="list-group-item"><b>Client catalog:</b> {{ implode(",", json_decode($client->gorilla_global_info)->Catalog) }}</li>
-                            <li class="list-group-item"><b>Client manifest:</b> {{ json_decode($client->gorilla_global_info)->Manifest }}</li>
-                            <li class="list-group-item"><b>Client Last Report startTime:</b> {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_StartTime)) ?? '' }}</li>
-                            <li class="list-group-item"><b>Client Last Report endTime:</b> {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_EndTime)) ?? '' }}</li>
+                            <li class="list-group-item"><b>Client catalog:</b> 
+                                @if (isset(json_decode($client->gorilla_global_info)->Catalog))
+                                    {{ implode(",", json_decode($client->gorilla_global_info)->Catalog) }}
+                                @else
+                                    <span class="badge bg-danger">No information available</span>
+                                @endif
+                            </li>
+                            <li class="list-group-item"><b>Client manifest:</b>
+                                @if (isset(json_decode($client->gorilla_global_info)->Manifest))
+                                    {{ implode(",", json_decode($client->gorilla_global_info)->Manifest) }}
+                                @else
+                                    <span class="badge bg-danger">No information available</span>
+                                @endif
+                            </li> 
+                            <li class="list-group-item"><b>Client Last Report startTime:</b> 
+                                @if (isset(json_decode($client->gorilla_global_info)->LastExecution_StartTime))
+                                    {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_StartTime)) }}
+                                @else
+                                    <span class="badge bg-danger">No information available</span>
+                                @endif
+                            </li>
+                            <li class="list-group-item"><b>Client Last Report endTime:</b> 
+                                @if (isset(json_decode($client->gorilla_global_info)->LastExecution_EndTime))
+                                    {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_EndTime)) }}
+                                @else
+                                    <span class="badge bg-danger">No information available</span>
+                                @endif
+                            </li>
                         </ul>
                     </p>        
                 </div>

@@ -49,13 +49,17 @@
                                     <tr>
                                         <th> Information </th>
                                         <td> 
-                                            @foreach(json_decode($client->information, true) as $key => $value)
-                                                <span><b>{{$key}}:</b></span><br />
-                                                @foreach($value as $key2 => $value2)
-                                                    <span><i>{{$key2}}: {{$value2}}</i></span>
-                                                @endforeach 
-                                                <br />                         
-                                            @endforeach
+                                            @if (isset($client->information))
+                                                @foreach(json_decode($client->information, true) as $key => $value)
+                                                    <span><b>{{$key}}:</b></span><br />
+                                                    @foreach($value as $key2 => $value2)
+                                                        <span><i>{{$key2}}: {{$value2}}</i></span>
+                                                    @endforeach 
+                                                    <br />                         
+                                                @endforeach
+                                            @else
+                                                <span>No information available.</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 </tbody>
@@ -68,26 +72,42 @@
                                     <tr>
                                         <th> Catalog </th>
                                         <td>
-                                            {{ implode(",", json_decode($client->gorilla_global_info)->Catalog) }}
+                                            @if (isset($client->gorilla_global_info))
+                                                {{ implode(",", json_decode($client->gorilla_global_info)->Catalog) }}
+                                            @else
+                                                <span class="badge bg-danger">No information available.</span>
+                                            @endif
                                         </td>
                                     <tr>
                                     <tr>
                                         <th> Manifest </th>
                                         <td>
-                                            {{ json_decode($client->gorilla_global_info)->Manifest }}
+                                            @if (isset($client->gorilla_global_info))
+                                                {{ implode(",", json_decode($client->gorilla_global_info)->Manifest) }}
+                                            @else
+                                                <span class="badge bg-danger">No information available.</span>
+                                            @endif
                                         </td>
 
                                     </tr>
                                     <tr>    
                                         <th> Last Execution StartTime </th>
                                         <td>
-                                            {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_StartTime)) ?? '' }}
+                                            @if (isset($client->gorilla_global_info))
+                                                {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_StartTime)) }}
+                                            @else
+                                                <span class="badge bg-danger">No information available.</span>
+                                            @endif
                                         </td>
                                     </tr>
                                     <tr>
                                         <th> Last Execution EndTime </th>
                                         <td>
-                                            {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_EndTime)) ?? '' }}
+                                            @if (isset($client->gorilla_global_info))
+                                                {{ date("d-m-Y H:i:s", strtotime(json_decode($client->gorilla_global_info)->LastExecution_EndTime)) }}
+                                            @else
+                                                <span class="badge bg-danger">No information available.</span>
+                                            @endif
                                         </td>
                                     </tr>
                                     <tr>
