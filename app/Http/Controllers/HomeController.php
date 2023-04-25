@@ -38,21 +38,6 @@ class HomeController extends Controller
         $activeClients = Client::whereDate('updated_at', '>=', Carbon::now()->subMinutes(15) )->count();
 
 
-        //UpTime < 1d
-        $UpTimeclients_1d = $clients->filter(function($client, $key){
-            
-            $information = json_decode($client->information);
-            if (!isset($information->OsUptime))
-                return false;
-            $strDateUpTime = Carbon::createFromTimestamp($information->OsUptime, 'Europe/Madrid');
-            $strDateInit = Carbon::createFromFormat('Y-m-d H:i:s', '1970-01-01 00:00:00');
-            $diffInDays = $strDateUpTime->diffInDays($strDateInit);
-            
-            if ($diffInDays > 1)
-                return true;
-            
-        })->count();
-
         
         //Obtener los 10 clientes más reciemtemte actualizados
         $lastmodify_clients = Client::orderBy('updated_at', 'desc')->take(1)->get();
@@ -61,7 +46,7 @@ class HomeController extends Controller
         $events = Event::all(); 
         
 
-        return view('home',compact('numClients','activeClients','now', 'minutes', 'clients','UpTimeclients_1d','events'));
+        return view('home',compact('numClients','activeClients','now', 'minutes', 'clients','events'));
     }
 
     

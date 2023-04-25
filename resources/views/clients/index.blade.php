@@ -57,6 +57,8 @@
             </tbody>
         </table>
         <!-- {!! $clients->links() !!} -->
+        
+
         {!! $clients->appends(\Request::except('page'))->render() !!}
     </div>
 <div>
