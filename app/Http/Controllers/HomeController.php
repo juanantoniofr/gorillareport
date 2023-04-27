@@ -49,13 +49,20 @@ class HomeController extends Controller
         //Hash_errors
         $hash_errors = array();
         $reports = Report::all();
-        /*foreach (json_decode($reports->managed_install) as $task){
-            if ( !empty( json_decode($task->hash_error) ) )
-                $hash_errors[$task] = $task->hash_error;
-        }*/
+        foreach ($reports as $report){
+            $managed_install = json_decode($report->managed_install);
+            foreach($managed_install as $install){
+                $hash_error = $install->installing_ps1_block->hash_error;
+                if ( !empty( $hash_error) ){
+                    $message = $report->client->name . " (" . $report->client->ip ."):  - " . $install->task_name ." " . $hash_error[0];
+                    $hash_errors[$report->client->id] = $message;
+                }
+            }
+        }
         
 
-        return view('home',compact('numClients','activeClients','now', 'minutes', 'clients','events'));
+        return view('home',compact('numClients','activeClients','now', 'minutes', 'clients','events','hash_errors'));
+        // {{ dd($hash_errors) }} 
     }
 
     

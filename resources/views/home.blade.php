@@ -27,7 +27,7 @@
         </div>
 
         <div class="card-deck col-lg-9">
-            <!-- Last 10 events -->
+            <!-- Errors and successful -->
             <div class="card">
                 <a href="#" class="text-decoration-none">
                     <div class="card-header p-3 text-white bg-dark">
@@ -37,6 +37,19 @@
                     <div class="card-body">
                         <p class="card-text">
                             <ul class="list-group list-group-flush">
+                                <!-- Hash errors -->
+                                @foreach($hash_errors as $client_id => $hash_error)
+                                    <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
+                                        <li class="list-group-item">
+                                            <span class="text-danger">
+                                                <i class="fa-solid fa-danger"></i> {{ $hash_error }}: 
+                                            </span>
+                                        </li>
+                                    </a>
+                                    
+                                @endforeach
+
+                                <!-- Events -->
                                 @foreach($events as $event )
                                     <a href="{{ route('clients.show_report', $event->report->client) }}" class="text-decoration-none">
                                         @if ($event->error > 0)
@@ -62,6 +75,10 @@
 
         </div><!-- card-deck -->
 
+       
+
     </div><!-- row -->    
 </div><!-- container -->
 @endsection
+
+ 
