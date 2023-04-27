@@ -196,7 +196,6 @@ class ClientController extends Controller
         catch (\Exception $e) {
             // Si hubo un error, registrar el error en el log de Laravel
             Log::error($e->getMessage());
-        
             // Retornar una respuesta de error
             return response()->json(['message' => 'ClientController@updateReport error ' .$e->getMessage()]);
         }

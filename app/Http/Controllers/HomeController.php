@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 
 use App\Models\Client;
 use App\Models\Event;
+use App\Models\Report;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 
@@ -44,6 +45,14 @@ class HomeController extends Controller
         
         //events
         $events = Event::all(); 
+
+        //Hash_errors
+        $hash_errors = array();
+        $reports = Report::all();
+        /*foreach (json_decode($reports->managed_install) as $task){
+            if ( !empty( json_decode($task->hash_error) ) )
+                $hash_errors[$task] = $task->hash_error;
+        }*/
         
 
         return view('home',compact('numClients','activeClients','now', 'minutes', 'clients','events'));
