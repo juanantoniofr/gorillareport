@@ -53,7 +53,7 @@
                             
 
                                 <!-- Events -->
-                                {{ dd($last_events) }}
+                                
                                 @foreach($last_events as $event )
                                     @foreach($event['managed_install_failed'] as $client_id => $install_failed)
                                         @foreach($install_failed as $task_name => $task_failed)
