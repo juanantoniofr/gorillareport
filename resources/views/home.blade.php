@@ -36,37 +36,25 @@
 
                     <div class="card-body">
                         <p class="card-text">
-                            <ul class="list-group list-group-flush">
-                                <!-- Hash errors -->
-                                @if (isset($hash_errors))
-                                @foreach($hash_errors as $client_id => $hash_error)
-                                    <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
-                                        <li class="list-group-item">
-                                            <span class="text-danger">
-                                                <i class="fa-solid fa-danger"></i> {{ $hash_error }}: 
-                                            </span>
-                                        </li>
-                                    </a>
-                                    
-                                @endforeach
-                                @endif
                             
-
-                                <!-- Events -->
-                                
+                            <ul class="list-group list-group-flush">
+                            <!-- Events -->
+                                {{ dd($last_events) }}
                                 @foreach($last_events as $event )
-                                    @foreach($event['managed_install_failed'] as $client_id => $install_failed)
-                                        @foreach($install_failed as $task_name => $task_failed)
-                                            @foreach($task_failed as $client_name => $error_message)
-                                            <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
-                                                <li class="list-group-item">
-                                                    <span class="text-danger">
-                                                        <i class="fa-solid fa-danger"></i> <b>{{ $client_name }}</b>: {{ $error_message }} 
-                                                    </span>
-                                                </li>
-                                            </a>
+                                    @foreach($event as $type => $install_failed)
+                                        @foreach($install_failed as $client_id => $tasks_failed)
+                                            @foreach($tasks_failed as $task_name => $faileds)
+                                                
+                                                @foreach($faileds as $client_name => $error_message)
+                                                    <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
+                                                        <li class="list-group-item">
+                                                            <span class="text-danger">
+                                                                <i class="fa-solid fa-danger"></i> <b>{{ $client_name }}</b>: {{ $error_message }} 
+                                                            </span>
+                                                        </li>
+                                                    </a>
+                                                @endforeach
                                             @endforeach
-                                            
                                         @endforeach
                                     @endforeach
                                 @endforeach   
