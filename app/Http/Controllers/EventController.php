@@ -25,4 +25,6 @@ class EventController extends Controller
         
         return view('events.index')->with('events', $events)->with('filter', $filter);
     }
+
+    
 }

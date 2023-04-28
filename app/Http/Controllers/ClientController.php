@@ -150,7 +150,7 @@ class ClientController extends Controller
                     
                     $command_output = $installing_ps1_block['command_output'];
                     Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
-                    // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
+                    // hacer algo con $command_output, como buscar la cadena "FAILED"
                     $managed_installs_failed = $managed_installs_failed + count(array_filter($command_output, function($str) {
                         return strpos($str, "FAILED") !== false;
                     }));

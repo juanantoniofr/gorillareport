@@ -6,7 +6,7 @@
     <div class="row">
     
         <h1>Dashboard</h1>
-
+        
         <div class="card-deck col-lg-3">
     
             <!-- Activity -->
@@ -38,6 +38,7 @@
                         <p class="card-text">
                             <ul class="list-group list-group-flush">
                                 <!-- Hash errors -->
+                                @if (isset($hash_errors))
                                 @foreach($hash_errors as $client_id => $hash_error)
                                     <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
                                         <li class="list-group-item">
@@ -48,27 +49,31 @@
                                     </a>
                                     
                                 @endforeach
+                                @endif
+                            
 
                                 <!-- Events -->
-                                @foreach($events as $event )
-                                    <a href="{{ route('clients.show_report', $event->report->client) }}" class="text-decoration-none">
-                                        @if ($event->error > 0)
-                                            <li class="list-group-item">
-                                                <span class="text-danger">
-                                                    <i class="fa-solid fa-danger"></i> {{ $event->report->client->name }} ({{ $event->report->client->ip }}):  {{ $event->error }} Errors installations  at {{ $event->updated_at }} 
-                                                </span>
-                                            </li>
-                                        @endif
-
-                                        <li class="list-group-item">
-                                            <span class="text-success">
-                                                <i class="fa-solid fa-check"></i> {{ $event->report->client->name }} ({{ $event->report->client->ip }}):  {{ $event->successful }} Successful installations  at {{ $event->updated_at }}
-                                            </span>
-                                        </li>
-                                    </a>
+                                {{ dd($last_events) }}
+                                @foreach($last_events as $event )
+                                    @foreach($event['managed_install_failed'] as $client_id => $install_failed)
+                                        @foreach($install_failed as $task_name => $task_failed)
+                                            @foreach($task_failed as $client_name => $error_message)
+                                            <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
+                                                <li class="list-group-item">
+                                                    <span class="text-danger">
+                                                        <i class="fa-solid fa-danger"></i> <b>{{ $client_name }}</b>: {{ $error_message }} 
+                                                    </span>
+                                                </li>
+                                            </a>
+                                            @endforeach
+                                            
+                                        @endforeach
+                                    @endforeach
                                 @endforeach   
-                            </ul>   
+                            </ul>
+                               
                         </p>
+                        {{ $last_events->withPath('home')->links() }}
                     </div>
                 </a>
             </div><!-- card last 10 events -->
