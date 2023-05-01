@@ -141,22 +141,7 @@ class ClientController extends Controller
             }
             
             // Obtener número de instalaciones failed
-            $managed_installs_failed = 0;
-
-            foreach ($managed_installs as $install) {
-                $installing_ps1_block = $install['installing_ps1_block'];
-                Log::error('ClientController@updateReport: $installing_ps1_block: ' . count($installing_ps1_block));
-                if (isset( $installing_ps1_block['command_output'])) {
-                    
-                    $command_output = $installing_ps1_block['command_output'];
-                    Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
-                    // hacer algo con $command_output, como buscar la cadena "FAILED"
-                    $managed_installs_failed = $managed_installs_failed + count(array_filter($command_output, function($str) {
-                        return strpos($str, "FAILED") !== false;
-                    }));
-                }
-                Log::error('ClientController@updateReport: $managed_installs_failed: ' . $managed_installs_failed);
-            }
+            $managed_installs_failed = count($managed_installs) - $managed_installs_successfull;
 
             // Actualizar evento
             $client->report->event()->updateOrCreate(

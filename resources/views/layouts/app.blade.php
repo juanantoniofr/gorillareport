@@ -14,7 +14,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -58,12 +58,23 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    Clients
+                                    Listings
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a href="{{ route('clients') }} " class="dropdown-item">PC's</a>
-                                    <a href="{{ route('events') }}" class="dropdown-item">Events</a>
-                                    <a href="{{ route('reports') }}" class="dropdown-item">Reports</a>
+                                    <a href="{{ route('listings.software') }}" class="dropdown-item">Software</a>
+                                    <a href="{{ route('listings.hardware') }}" class="dropdown-item">Hardware</a>
+                                    <a href="" class="dropdown-item">System Events</a>
+                                    
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    PC's Clients
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a href="{{ route('clients') }} " class="dropdown-item">Pc List</a>
+                                    <a href="{{ route('events') }}" class="dropdown-item">Gorilla Events</a>
+                                    <a href="{{ route('reports') }}" class="dropdown-item">Gorilla Reports</a>
                                     
                                 </div>
                             </li>

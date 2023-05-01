@@ -29,6 +29,7 @@
                         <th class="p-3" >@sortablelink('updated_at')</th>
                         <th class="p-3" >@sortablelink('hostname', 'Hostname')</th>
                         <th class="p-3">@sortablelink('successful','Count successful')</th>
+                        <th class="p-3">@sortablelink('error','Count errors')</th>
                         <th class="p-3">Report</th>
                     </tr>
                 </thead>
@@ -39,6 +40,9 @@
                         <td class="p-3"><a href="{{ route('clients.show',$event->report->client->id) }}"> {{$event->report->client->name}} </a></td>
                         <td class="p-3">
                             {{ $event->successful }} 
+                        </td>
+                        <td class="p-3">
+                            {{ $event->error }}
                         </td>
                         <td class="p-3">
                             <a href="{{ route('clients.show_report',$event->report->client) }}"> View report</a>

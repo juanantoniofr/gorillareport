@@ -31,7 +31,7 @@
             <div class="card">
                 <a href="#" class="text-decoration-none">
                     <div class="card-header p-3 text-white bg-dark">
-                        <h2 class="card-title"><i class="fa-solid fa-calendar"></i> Last events </h2>
+                        <h2 class="card-title"><i class="fa-solid fa-calendar"></i> Last Gorilla Events </h2>
                     </div>
 
                     <div class="card-body">

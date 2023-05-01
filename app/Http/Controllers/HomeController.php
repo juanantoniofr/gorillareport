@@ -48,8 +48,6 @@ class HomeController extends Controller
         
 
         return view('home',compact('numClients','activeClients','now', 'minutes', 'clients','last_events'));
-        //{{ dd($last_events) }} 
-        //{!! $last_events->appends(\Request::except('page'))->render() !!}
     }
 
     

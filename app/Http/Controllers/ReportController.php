@@ -46,7 +46,6 @@ class ReportController extends Controller
             ->offset($offset)
             ->limit($perPage)
             ->get();    
-        //$reports = Report::all();
 
         //init  last_events array
         $last_events = array();
@@ -111,7 +110,7 @@ class ReportController extends Controller
                 $last_events[$report->client->id]['hash_errors'] = $hash_errors;
             }
 
-            // Get failed tasks
+            // Get failed and successful tasks
             $task_failed = array();
             $failed = array(); 
             $task_successful = 0;
@@ -146,9 +145,6 @@ class ReportController extends Controller
             if ( $task_successful > 0) {
                 $last_events[$report->client->id]['managed_install_successful'] =  $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . ", " . $task_successful . " tasks successful";
             }
-
-
-
         }
 
 
