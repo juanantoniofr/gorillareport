@@ -41,8 +41,12 @@ class ReportController extends Controller
         // Calcular el desplazamiento
         $offset = ($page - 1) * $perPage;
         
-        //get reports
-        $reports = Report::all();
+        //get reports, order by updated_at
+        $reports = Report::sortable(['updated_at' => 'desc'])
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();    
+        //$reports = Report::all();
 
         //init  last_events array
         $last_events = array();
@@ -66,7 +70,7 @@ class ReportController extends Controller
                         //search File hash does not match
                         foreach ($hash_error as $str) {
                             if (strpos($str, "File hash does not match") !== false) {
-                                $hash_failed[$report->client->name] = $str;
+                                $hash_failed[] = $report->client->name . ": " .$str;
                             }
                         }
                     }
@@ -83,7 +87,8 @@ class ReportController extends Controller
 
             // Get failed tasks
             $task_failed = array();
-            $failed = array(); // inicializar el array fuera del bucle
+            $failed = array(); 
+            $task_successful = 0;
             foreach ($managed_install as $install) {
                 $installing_ps1_block = $install->installing_ps1_block;
                 if (isset($installing_ps1_block->command_output)) {
@@ -91,9 +96,16 @@ class ReportController extends Controller
                     // Buscar la cadena "FAILED" y agregar los resultados al array $failed
                     foreach ($command_output as $str) {
                         if (strpos($str, "FAILED") !== false) {
-                            $failed[$report->client->name] = $str;
+                            $failed[] = $report->client->name .": " . $str;
                         }
                     }
+                    // Buscar la cadena "SUCCESSFUL" y agregar los resultados al array $succeeded
+                    foreach ($command_output as $str) {
+                        if (strpos($str, "SUCCESSFUL") !== false) {
+                            $task_successful++;
+                            }
+                        }
+                    
                 }
             }
             
@@ -105,6 +117,12 @@ class ReportController extends Controller
             if (count($task_failed) > 0) {
                 $last_events[$report->client->id]['managed_install_failed'] = $task_failed;
             }
+
+            if ( $task_successful > 0) {
+                $last_events[$report->client->id]['managed_install_successful'] =  $task_successful . " tasks successful in " . $report->client->name . "  at " . $report->updated_at->format('d-m-Y H:i:s') ;
+            }
+
+
 
         }
 

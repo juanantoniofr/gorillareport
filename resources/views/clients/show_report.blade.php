@@ -10,7 +10,7 @@
                 
                 <div class="card-body">
                     
-                    <a href="{{ url('/clients/' . $client->id) }}" title="Back"><button class="btn btn-warning btn-lg my-4"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                    <a href="{{ url()->previous() }}" title="Back"><button class="btn btn-warning btn-lg my-4"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                     
                     <h3 class="card-title">Basic Information</h3>
                     <p class="card-text">
@@ -60,16 +60,18 @@
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="heading_{{$key}}">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{$key}}" aria-expanded="true" aria-controls="collapse_{{$key}}">
-                                            @if (isset($managed_install->installing_ps1_block->command_output))
-                                                @if (in_array(true, array_map(function($str) {
+                                            @if (isset($managed_install->installing_ps1_block->hash_error) && isset($managed_install->installing_ps1_block->command_output))
+
+                                                @if (!empty($managed_install->installing_ps1_block->hash_error) || in_array(true, array_map(function($str) {
                                                     return strpos($str, "FAILED") !== false;
                                                     }, $managed_install->installing_ps1_block->command_output)))
-                                                    <span class="text-danger"><b>Task name:</b> {{ $managed_install->task_name }} 
+
+                                                    <span class="text-danger"><b>Task name:</b> {{ $managed_install->task_name }}
                                                 @else
                                                     <span class="text-success"><b>Task name:</b> {{ $managed_install->task_name }}
                                                 @endif
                                             @else
-                                                <span class="text-info"><b>Task name:</b> {{ $managed_install->task_name }}
+                                                <span class="text-success"><b>Task name:</b> {{ $managed_install->task_name }}
                                             @endif
                                         </span>                                            
                                         </button>

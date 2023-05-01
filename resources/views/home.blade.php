@@ -39,23 +39,31 @@
                             
                             <ul class="list-group list-group-flush">
                             <!-- Events -->
-                                {{ dd($last_events) }}
-                                @foreach($last_events as $event )
-                                    @foreach($event as $type => $install_failed)
-                                        @foreach($install_failed as $client_id => $tasks_failed)
-                                            @foreach($tasks_failed as $task_name => $faileds)
-                                                
-                                                @foreach($faileds as $client_name => $error_message)
+                                @foreach($last_events as $events )
+                                    @foreach($events as $cheking_item => $cheking_result)
+                                        @if ($cheking_item == "managed_install_successful")
+                                            <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
+                                                <li class="list-group-item">
+                                                    <span class="text-success">
+                                                        <i class="fa-solid fa-success"></i> {{ $cheking_result }} 
+                                                    </span>
+                                                </li>
+                                            </a>
+                                        @else
+                                            @foreach($cheking_result as $client_id => $tasks_result)
+                                                @foreach($tasks_result as $task_name => $results)
+                                                    @foreach($results as $message)
                                                     <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
                                                         <li class="list-group-item">
                                                             <span class="text-danger">
-                                                                <i class="fa-solid fa-danger"></i> <b>{{ $client_name }}</b>: {{ $error_message }} 
+                                                                <i class="fa-solid fa-danger"></i> {{ $message }} 
                                                             </span>
                                                         </li>
                                                     </a>
-                                                @endforeach
+                                                    @endforeach
+                                                @endforeach 
                                             @endforeach
-                                        @endforeach
+                                        @endif
                                     @endforeach
                                 @endforeach   
                             </ul>

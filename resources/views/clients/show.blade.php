@@ -9,7 +9,7 @@
                     <div class="card-header"><h1>Client {{ $client->name }}</h1></div>
                     <div class="card-body">
 
-                        <a href="{{ url('/clients') }}" title="Back"><button class="btn btn-warning btn-lg"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url()->previous() }}" title="Back"><button class="btn btn-warning btn-lg"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                         <a href="{{ url('/clients/report/' . $client->id) }}" title="View Report"><button class="btn btn-info btn-lg"><i class="fa fa-eye" aria-hidden="true"></i> View Report</button></a>
                         <!--
                         <a href="{{ url('/clients/' . $client->id . '/edit') }}" title="Edit Client"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
