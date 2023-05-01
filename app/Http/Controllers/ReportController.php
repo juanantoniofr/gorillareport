@@ -59,6 +59,8 @@ class ReportController extends Controller
             //Get Hash errors task
             $hash_errors = array(); 
             $hash_failed = array();
+            $download_failed = array();
+            $download_errors = array();
             foreach ($managed_install as $install) {
                 $installing_ps1_block = $install->installing_ps1_block;
                 // Obtener hash_error si está definido
@@ -70,13 +72,37 @@ class ReportController extends Controller
                         //search File hash does not match
                         foreach ($hash_error as $str) {
                             if (strpos($str, "File hash does not match") !== false) {
-                                $hash_failed[] = $report->client->name . ": " .$str;
+                                $hash_failed[] = $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') .$str;
+                            }
+                        }
+                    }
+                }
+                // download error
+                if (isset($installing_ps1_block->download_error)) {
+                    $download_error = $installing_ps1_block->download_error; 
+                    // Si download_error no es vacio, agregar los resultados al array $hash_errors
+                    if (!empty($download_error)) {
+                     
+                        //search File hash does not match
+                        foreach ($download_error as $str) {
+                            if (strpos($str, "download") !== false) {
+                                $download_failed[] = $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') ." " .$str;
                             }
                         }
                     }
                 }
             }
             
+            //download failed
+            if (count($download_failed) > 0) {
+                $download_errors[$report->client->id][$install->task_name] = $download_failed;
+            }
+
+            if (!empty($download_errors)) {
+                $last_events[$report->client->id]['download_errors'] = $download_errors;
+            }
+
+            //hash failed
             if (count($hash_failed) > 0) {
                 $hash_errors[$report->client->id][$install->task_name] = $hash_failed;
             }
@@ -96,16 +122,15 @@ class ReportController extends Controller
                     // Buscar la cadena "FAILED" y agregar los resultados al array $failed
                     foreach ($command_output as $str) {
                         if (strpos($str, "FAILED") !== false) {
-                            $failed[] = $report->client->name .": " . $str;
+                            $failed[] = $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . $str;
                         }
                     }
                     // Buscar la cadena "SUCCESSFUL" y agregar los resultados al array $succeeded
                     foreach ($command_output as $str) {
                         if (strpos($str, "SUCCESSFUL") !== false) {
                             $task_successful++;
-                            }
                         }
-                    
+                    }
                 }
             }
             
@@ -119,7 +144,7 @@ class ReportController extends Controller
             }
 
             if ( $task_successful > 0) {
-                $last_events[$report->client->id]['managed_install_successful'] =  $task_successful . " tasks successful in " . $report->client->name . "  at " . $report->updated_at->format('d-m-Y H:i:s') ;
+                $last_events[$report->client->id]['managed_install_successful'] =  $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . ", " . $task_successful . " tasks successful";
             }
 
 

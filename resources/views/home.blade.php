@@ -39,6 +39,7 @@
                             
                             <ul class="list-group list-group-flush">
                             <!-- Events -->
+                            
                                 @foreach($last_events as $events )
                                     @foreach($events as $cheking_item => $cheking_result)
                                         @if ($cheking_item == "managed_install_successful")
