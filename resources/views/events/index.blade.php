@@ -49,4 +49,10 @@
                         </td>
                     </tr>
                     @endforeach
+                </tbody>
+            </table>
+        </div>
+        {!! $events->appends(\Request::except('page'))->render() !!}
+    </div>
+</div>
 @endsection    

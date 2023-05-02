@@ -20,10 +20,10 @@ class ClientController extends Controller
         if (!empty($filter)) {
             $clients = Client::sortable(['updated_at' => 'desc'])
                 ->where('clients.name', 'like', '%'.$filter.'%')
-                ->paginate(10);
+                ->paginate(5);
         } else {
             $clients = Client::sortable(['updated_at' => 'desc'])
-                ->paginate(10);
+                ->paginate(5);
         }
         
         return view('clients.index')->with('clients', $clients)->with('filter', $filter);
@@ -124,7 +124,8 @@ class ClientController extends Controller
 
             // Obtener número de instalaciones successfull
             $managed_installs_successfull = 0;
-            
+            $managed_installs_failed = 0;
+
             foreach ($managed_installs as $install) {
                 $installing_ps1_block = $install['installing_ps1_block'];
                 Log::error('ClientController@updateReport: $installing_ps1_block: ' . count($installing_ps1_block));
@@ -132,16 +133,21 @@ class ClientController extends Controller
                     
                     $command_output = $installing_ps1_block['command_output'];
                     Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
+                    
                     // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
                     $managed_installs_successfull = $managed_installs_successfull + count(array_filter($command_output, function($str) {
                         return strpos($str, "SUCCESSFUL") !== false;
+                    }));
+
+                    $managed_installs_failed = $managed_installs_failed + count(array_filter($command_output, function($str) {
+                        return strpos($str, "FAILED") !== false;
                     }));
                 }
                 Log::error('ClientController@updateReport: $managed_installs_successfull: ' . $managed_installs_successfull);
             }
             
             // Obtener número de instalaciones failed
-            $managed_installs_failed = count($managed_installs) - $managed_installs_successfull;
+            
 
             // Actualizar evento
             $client->report->event()->updateOrCreate(

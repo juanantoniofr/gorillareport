@@ -17,10 +17,10 @@ class EventController extends Controller
         if (!empty($filter)) {
             $events = Event::sortable(['updated_at' => 'desc'])
                 ->where('clients.name', 'like', '%'.$filter.'%')
-                ->paginate(10);
+                ->paginate(5);
         } else {
             $events = Event::sortable(['updated_at' => 'desc'])
-                ->paginate(10);
+                ->paginate(5);
         }
         
         return view('events.index')->with('events', $events)->with('filter', $filter);

@@ -41,4 +41,10 @@
                         </td>
                     </tr>
                     @endforeach
+                </tbody>
+            </table>
+        </div>
+        {!! $reports->appends(\Request::except('page'))->render() !!}
+    </div>
+</div>
 @endsection    

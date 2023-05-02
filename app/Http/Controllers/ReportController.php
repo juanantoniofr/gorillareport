@@ -19,10 +19,10 @@ class ReportController extends Controller
         if (!empty($filter)) {
             $reports = Report::sortable(['updated_at' => 'desc'])
                 ->where('clients.name', 'like', '%'.$filter.'%')
-                ->paginate(10);
+                ->paginate(5);
         } else {
             $reports = Report::sortable(['updated_at' => 'desc'])
-                ->paginate(10);
+                ->paginate(5);
         }
         
         return view('reports.index')->with('reports', $reports)->with('filter', $filter);
