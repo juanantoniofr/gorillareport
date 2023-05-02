@@ -35,7 +35,7 @@
             <tbody>
                 @foreach($clients as $client)
                 <tr>
-                    <td class="p-3">{{$client->updated_at}}</td>
+                    <td class="p-3">{{$client->updated_at->format('d-m-Y H:i:s')}}</td>
                     <td class="p-3"><a href="{{ route('clients.show',$client->id) }}"> {{$client->name}} </a></td>
                     <td class="p-3">
                         <?php $ips = json_decode($client->ip, true) ?>

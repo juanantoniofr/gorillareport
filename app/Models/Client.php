@@ -23,4 +23,6 @@ class Client extends Model
     {
         return $this->hasOne(Report::class);
     }
+
+    //ALTER TABLE clients MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 }
