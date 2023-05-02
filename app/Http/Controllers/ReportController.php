@@ -28,126 +28,83 @@ class ReportController extends Controller
         return view('reports.index')->with('reports', $reports)->with('filter', $filter);
     }
 
-    public function get_lastEvents(Request $request)
-    {
-        //paginación
+    
+    public function getEvents(Request $request){
         // Obtemos el número de elementos que quieres mostrar por página
         $perPage = 10;
-        
-        
+
         // Obtemos el número de página actual
         $page = request()->input('page', 1);
 
         // Calcular el desplazamiento
         $offset = ($page - 1) * $perPage;
-        
-        //get reports, order by updated_at
-        $reports = Report::sortable(['updated_at' => 'desc'])
-            ->offset($offset)
-            ->limit($perPage)
-            ->get();    
 
-        //init  last_events array
-        $last_events = array();
+        // Cargar informes y clientes asociados
+        $reports = Report::with('client')
+            ->sortable(['updated_at' => 'desc'])
+            ->get();
 
-        // Obtener instalaciones failed
+        // Inicializar array de eventos
+        $last_events = [];
+
         foreach ($reports as $report) {
-            
             $managed_install = json_decode($report->managed_install); 
             
-            //Get Hash errors task
-            $hash_errors = array(); 
-            $hash_failed = array();
-            $download_failed = array();
-            $download_errors = array();
-            foreach ($managed_install as $install) {
-                $installing_ps1_block = $install->installing_ps1_block;
-                // Obtener hash_error si está definido
-                if (isset($installing_ps1_block->hash_error)) {
-                    $hash_error = $installing_ps1_block->hash_error; 
-                    // Si hash_error no es vacio, agregar los resultados al array $hash_errors
-                    if (!empty($hash_error)) {
-                     
-                        //search File hash does not match
-                        foreach ($hash_error as $str) {
-                            if (strpos($str, "File hash does not match") !== false) {
-                                $hash_failed[] = $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') .$str;
-                            }
-                        }
-                    }
-                }
-                // download error
-                if (isset($installing_ps1_block->download_error)) {
-                    $download_error = $installing_ps1_block->download_error; 
-                    // Si download_error no es vacio, agregar los resultados al array $hash_errors
-                    if (!empty($download_error)) {
-                     
-                        //search File hash does not match
-                        foreach ($download_error as $str) {
-                            if (strpos($str, "download") !== false) {
-                                $download_failed[] = $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') ." " .$str;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            //download failed
-            if (count($download_failed) > 0) {
-                $download_errors[$report->client->id][$install->task_name] = $download_failed;
-            }
-
-            if (!empty($download_errors)) {
-                $last_events[$report->client->id]['download_errors'] = $download_errors;
-            }
-
-            //hash failed
-            if (count($hash_failed) > 0) {
-                $hash_errors[$report->client->id][$install->task_name] = $hash_failed;
-            }
-                    
-            if (!empty($hash_errors)) {
-                $last_events[$report->client->id]['hash_errors'] = $hash_errors;
-            }
-
-            // Get failed and successful tasks
-            $task_failed = array();
-            $failed = array(); 
+            $hash_errors = [];
+            $download_errors = [];
+            $task_failed = [];
             $task_successful = 0;
+            
             foreach ($managed_install as $install) {
-                $installing_ps1_block = $install->installing_ps1_block;
-                if (isset($installing_ps1_block->command_output)) {
-                    $command_output = $installing_ps1_block->command_output;
-                    // Buscar la cadena "FAILED" y agregar los resultados al array $failed
+                $installing_ps1_block = $install->installing_ps1_block ?? null;
+                $command_output = $installing_ps1_block->command_output ?? null;
+                $hash_error = $installing_ps1_block->hash_error ?? null;
+                $download_error = $installing_ps1_block->download_error ?? null;
+                
+                if ($hash_error) {
+                    foreach ($hash_error as $str) {
+                        if (strpos($str, "File hash does not match") !== false) {
+                            $hash_errors[] = [ $install->task_name .": " . $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') .$str , "id" => $report->client->id ];
+                        }
+                    }
+                }
+                
+                if ($download_error) {
+                    foreach ($download_error as $str) {
+                        if (strpos($str, "download") !== false) {
+                            $download_errors[] = [ $install->task_name .": ". $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') ." " .$str,  "id" => $report->client->id ];
+                        }
+                    }
+                }
+                
+                if ($command_output) {
                     foreach ($command_output as $str) {
                         if (strpos($str, "FAILED") !== false) {
-                            $failed[] = $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . $str;
-                        }
-                    }
-                    // Buscar la cadena "SUCCESSFUL" y agregar los resultados al array $succeeded
-                    foreach ($command_output as $str) {
-                        if (strpos($str, "SUCCESSFUL") !== false) {
+                            $task_failed[] = [ $install->task_name . ": " . $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . $str, "id" => $report->client->id ];
+                        } elseif (strpos($str, "SUCCESSFUL") !== false) {
                             $task_successful++;
                         }
                     }
                 }
             }
             
-            if (count($failed) > 0) {
-                $task_failed[$report->client->id][$install->task_name] = $failed;
+            if (!empty($hash_errors)) {
+                $last_events = $hash_errors;
             }
-
-            //Si $managed_installs_failed es mayor a 0, entonces el cliente tiene instalaciones fallidas
-            if (count($task_failed) > 0) {
-                $last_events[$report->client->id]['managed_install_failed'] = $task_failed;
+            
+            if (!empty($download_errors)) {
+                $last_events = array_merge($last_events, $download_errors);
             }
-
-            if ( $task_successful > 0) {
-                $last_events[$report->client->id]['managed_install_successful'] =  $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . ", " . $task_successful . " tasks successful";
+            
+            if (!empty($task_failed)) {
+                $last_events = array_merge($last_events,$task_failed);
+            }
+            
+            if ($task_successful > 0) {
+                $last_events[] =  [ $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . ", " . $task_successful . " tasks successful", "id" => $report->client->id ];
             }
         }
-
-
+        
         //paginación
         // Obtener una porción de $last_events que contiene los elementos de la página actual
         $slice = array_slice($last_events, $offset, $perPage);
@@ -157,7 +114,7 @@ class ReportController extends Controller
         $paginator->appends(request()->query());
 
         return $paginator;
-
+        
     }
 
 }

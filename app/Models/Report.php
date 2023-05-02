@@ -31,13 +31,5 @@ class Report extends Model
         return $this->hasOne(Event::class);
     }
 
-    /*public function hostnameSortable($query, $direction)
-    {
-        return $query->join('clients', 'clients.id', '=', 'reports.client_id')
-                    ->orderBy('name', $direction)
-                    ->select('clients.*');
-    }*/
-
-
 
 }

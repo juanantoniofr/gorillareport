@@ -43,7 +43,7 @@ class HomeController extends Controller
 
         
         //last events
-        $last_events = $reportController->get_lastEvents($request);
+        $last_events = $reportController->getEvents($request);
 
         
 

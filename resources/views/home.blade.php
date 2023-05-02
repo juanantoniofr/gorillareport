@@ -36,39 +36,21 @@
 
                     <div class="card-body">
                         <p class="card-text">
-                            
+                           
                             <ul class="list-group list-group-flush">
                             <!-- Events -->
-                            
-                                @foreach($last_events as $events )
-                                    @foreach($events as $cheking_item => $cheking_result)
-                                        @if ($cheking_item == "managed_install_successful")
-                                            <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
-                                                <li class="list-group-item">
-                                                    <span class="text-success">
-                                                        <i class="fa-solid fa-success"></i> {{ $cheking_result }} 
-                                                    </span>
-                                                </li>
-                                            </a>
+                                
+                                @foreach($last_events as $event )
+                                    <a href="{{ route('clients.show_report', [ 'client' => $event['id'] ] )  }}" class="text-decoration-none">
+                                        @if(strpos($event[0], 'successful') === false)
+                                            <li class="list-group-item text-danger"> <i class="fa-solid fa-danger"></i> {{ $event[0] }}</li>
                                         @else
-                                            @foreach($cheking_result as $client_id => $tasks_result)
-                                                @foreach($tasks_result as $task_name => $results)
-                                                    @foreach($results as $message)
-                                                    <a href="{{ route('clients.show_report', $client_id) }}" class="text-decoration-none">
-                                                        <li class="list-group-item">
-                                                            <span class="text-danger">
-                                                                <i class="fa-solid fa-danger"></i> {{ $message }} 
-                                                            </span>
-                                                        </li>
-                                                    </a>
-                                                    @endforeach
-                                                @endforeach 
-                                            @endforeach
+                                            <li class="list-group-item text-success"> <i class="fa-solid fa-success"></i> {{ $event[0] }}</li>
                                         @endif
-                                    @endforeach
-                                @endforeach   
+                                            </li>
+                                    </a>
+                                @endforeach                        
                             </ul>
-                               
                         </p>
                         {{ $last_events->withPath('home')->links() }}
                     </div>
