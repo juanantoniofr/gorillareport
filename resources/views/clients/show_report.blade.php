@@ -53,8 +53,9 @@
                 <div class="card-body">
                     <h3 class="card-title">Managed Install</h3>
                 
-                    
+                              
                         @if( isset($client->report->managed_install) )
+                        
                             <div class="accordion" id="managed_installs_acordeon">
                             @foreach(json_decode($client->report->managed_install) as $key => $managed_install)
                                 <div class="accordion-item">
@@ -96,7 +97,14 @@
                                             @if ( $managed_install->check_block ) 
                                                 <b>Check block:</b> 
                                                 <p class="ms-4">
-                                                    <b>Vía:</b> {{ $managed_install->check_block->via }}
+                                                    <b>Vía:</b> {{ $managed_install->check_block->via }}<br />
+                                                    @foreach($managed_install->check_block->script as $key => $value)
+                                                        <b>{{ $key }}: </b>
+                                                        @foreach($value as $val)
+                                                            {{ $val }}<br />
+                                                        @endforeach
+                                                        <br />
+                                                    @endforeach
                                                 </p>
                                             @else
                                                 <b>Check block:</b> Nothing in this Section.</span><br />
