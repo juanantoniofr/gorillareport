@@ -3,7 +3,7 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-md-12 py-3">
-            <h1>Event List</h1>
+            <h1>Summary List</h1>
         </div>
         <div class="col-md-12">
             <form method="GET">

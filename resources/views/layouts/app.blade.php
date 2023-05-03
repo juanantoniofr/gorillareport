@@ -73,7 +73,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a href="{{ route('clients') }} " class="dropdown-item">Pc List</a>
-                                    <a href="{{ route('events') }}" class="dropdown-item">Gorilla Events</a>
+                                    <a href="{{ route('events') }}" class="dropdown-item">Gorilla Summaries</a>
                                     <a href="{{ route('reports') }}" class="dropdown-item">Gorilla Reports</a>
                                     
                                 </div>
