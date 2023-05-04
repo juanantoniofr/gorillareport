@@ -55,24 +55,32 @@
                 
                               
                         @if( isset($client->report->managed_install) )
-                        
+                            
                             <div class="accordion" id="managed_installs_acordeon">
                             @foreach(json_decode($client->report->managed_install) as $key => $managed_install)
+                            
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="heading_{{$key}}">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{$key}}" aria-expanded="true" aria-controls="collapse_{{$key}}">
                                             @if (isset($managed_install->installing_ps1_block->hash_error) && isset($managed_install->installing_ps1_block->command_output))
 
-                                                @if (!empty($managed_install->installing_ps1_block->hash_error) || in_array(true, array_map(function($str) {
+                                                @if (  empty($managed_install->installing_ps1_block->hash_error) && in_array(true, array_map(function($str) {
+                                                    return strpos($str, "SUCCESSFUL") !== false;
+                                                    }, $managed_install->installing_ps1_block->command_output)) && count(array_filter($managed_install->check_block->script->stderr, function($value) {return trim($value) != "";})) > 0 )
+
+                                                    <span class="text-warning"><b>Task name:</b> {{ $managed_install->task_name }}
+
+                                                @elseif (!empty($managed_install->installing_ps1_block->hash_error) || in_array(true, array_map(function($str) {
                                                     return strpos($str, "FAILED") !== false;
-                                                    }, $managed_install->installing_ps1_block->command_output)))
+                                                    }, $managed_install->installing_ps1_block->command_output)) || count(array_filter($managed_install->check_block->script->stderr, function($value) {return trim($value) != "";})) > 0 )
 
                                                     <span class="text-danger"><b>Task name:</b> {{ $managed_install->task_name }}
+                                                
                                                 @else
                                                     <span class="text-success"><b>Task name:</b> {{ $managed_install->task_name }}
                                                 @endif
                                             @else
-                                                <span class="text-success"><b>Task name:</b> {{ $managed_install->task_name }}
+                                                <span class="text-success"><b>Task name dasdasd:</b> {{ $managed_install->task_name }}
                                             @endif
                                         </span>                                            
                                         </button>
@@ -91,17 +99,18 @@
                                             @else 
                                                 <b>Download:</b> <span class="text-success">correct!!</span>
                                             @endif
+
                                             <br />
 
                                             <!-- check_block -->
                                             @if ( $managed_install->check_block ) 
-                                                <b>Check block:</b> 
+                                                <b>Check block: </b> 
                                                 <p class="ms-4">
                                                     <b>Vía:</b> {{ $managed_install->check_block->via }}<br />
                                                     @foreach($managed_install->check_block->script as $key => $value)
-                                                        <b>{{ $key }}: </b>
+                                                        <b>{{ $key }}: </b><br />
                                                         @foreach($value as $val)
-                                                            {{ $val }}<br />
+                                                             <span>{{ $val }}</span>
                                                         @endforeach
                                                         <br />
                                                     @endforeach

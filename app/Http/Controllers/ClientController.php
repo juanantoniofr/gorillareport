@@ -125,8 +125,27 @@ class ClientController extends Controller
             // Obtener número de instalaciones successfull
             $managed_installs_successfull = 0;
             $managed_installs_failed = 0;
+            $managed_installs_warning = 0;
 
             foreach ($managed_installs as $install) {
+
+                $is_successful = false;
+                $is_failed = false;
+                
+                //check_block
+                $check_block = $install['check_block'];
+                if ( isset($check_block['script']) ){
+                    $script = $check_block['script'];
+                    $stderr = $script['stderr'];
+                    //Log::error('ClientController@updateReport: $stderr count: ' . count(array_filter($stderr, function($value) {return trim($value) != "";})));
+                
+                    if (count(array_filter($stderr, function($value) {return trim($value) != "";})) > 0){
+                        //$managed_installs_failed = $managed_installs_failed + 1;
+                        $is_failed = true;
+                    }
+                }
+
+                //installing_ps1_block
                 $installing_ps1_block = $install['installing_ps1_block'];
                 Log::error('ClientController@updateReport: $installing_ps1_block: ' . count($installing_ps1_block));
                 if (isset( $installing_ps1_block['command_output'])) {
@@ -134,27 +153,50 @@ class ClientController extends Controller
                     $command_output = $installing_ps1_block['command_output'];
                     Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
                     
-                    // hacer algo con $command_output, como buscar la cadena "SUCCESSFUL"
-                    $managed_installs_successfull = $managed_installs_successfull + count(array_filter($command_output, function($str) {
+                    // Buscar la cadena "SUCCESSFUL"
+                    if (count(array_filter($command_output, function($str) {
                         return strpos($str, "SUCCESSFUL") !== false;
-                    }));
-
-                    $managed_installs_failed = $managed_installs_failed + count(array_filter($command_output, function($str) {
+                    })) > 0){
+                        //$managed_installs_successfull = $managed_installs_successfull + 1;
+                        $is_successful = true;
+                    }
+                    /*$managed_installs_successfull = $managed_installs_successfull + count(array_filter($command_output, function($str) {
+                        return strpos($str, "SUCCESSFUL") !== false;
+                    }));*/
+                    // Buscar la cadena "FAILED"
+                    if (count(array_filter($command_output, function($str) {
                         return strpos($str, "FAILED") !== false;
-                    }));
+                    })) > 0){
+                        //$managed_installs_failed = $managed_installs_failed + 1;
+                        $is_failed = true;
+                    }
+                    /*$managed_installs_failed = $managed_installs_failed + count(array_filter($command_output, function($str) {
+                        return strpos($str, "FAILED") !== false;
+                    }));*/
+
+                    if ($is_successful && $is_failed){
+                        $managed_installs_warning = $managed_installs_warning + 1;
+                    }
+                    elseif ($is_successful && !$is_failed){
+                        $managed_installs_successfull = $managed_installs_successfull + 1;
+                    }
+                    elseif (!$is_successful && $is_failed){
+                        $managed_installs_failed = $managed_installs_failed + 1;
+                    }
                 }
+
+                
                 Log::error('ClientController@updateReport: $managed_installs_successfull: ' . $managed_installs_successfull);
             }
             
-            // Obtener número de instalaciones failed
             
-
             // Actualizar evento
             $client->report->event()->updateOrCreate(
                 ['report_id' => $client->report->id],
                 [
                     'successful' => $managed_installs_successfull,
                     'error' => $managed_installs_failed,
+                    'warning' => $managed_installs_warning,
                 ]
             );
             
