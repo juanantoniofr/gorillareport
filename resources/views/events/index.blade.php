@@ -6,34 +6,30 @@
             <h1>Summary List</h1>
         </div>
         <div class="col-md-12">
-            <form method="GET">
-            <!-- <form method="GET" action="{{ url('events') }}"> -->
-                <div class="form-group">
-                    <label for="error">Error</label>
-                    <input type="checkbox" id="error" name="error" value="1" {{ old('error') ? 'checked' : '' }}>
-                </div>
-                    <div class="form-group">
-                    <label for="warning">Warning</label>
-                    <input type="checkbox" id="warning" name="warning" value="1" {{ old('warning') ? 'checked' : '' }}>
-                </div>
-                <div class="form-group">
-                    <label for="successful">Successful</label>
-                    <input type="checkbox" id="successful" name="successful" value="1" {{ old('successful') ? 'checked' : '' }}>
-                </div>
-                
-            
-                <div class="col align-items-end d-flex flex-column mb-3">
-                    <div class="d-flex flex-column ">
-                        <label for="filter" class="form-label">Filter</label>
+            <form method="GET"> 
+                <!-- <form method="GET" action="{{ url('events') }}"> -->
+                <div class="row col-sm-12 py-3 row-cols-lg-auto row-cols-sm-auto">
+                    
+                    <div class="col" style="height: min-content;align-self: center;">
+                        <input type="checkbox" class="form-check-input" id="error" name="error" value="1" {{ old('error') ? 'checked' : '' }}>
+                        <label for="error" class="">Error</label>
+                    </div>
+                    <div class="col" style="height: min-content;align-self: center;">
+                        <input type="checkbox" class="form-check-input" id="warning" name="warning" value="1" {{ old('warning') ? 'checked' : '' }}>
+                        <label for="warning" class="">Warning</label>
+                    </div>
+                    <div class="col" style="height: min-content;align-self: center;">
+                        <input type="checkbox" class="form-check-input" id="successful" name="successful" value="1" {{ old('successful') ? 'checked' : '' }}>
+                        <label for="successful" class="">Successful</label>
+                    </div>
+                    
+                    <div class="col-sm-4">
                         <input type="text" class="form-control" id="filter" name="filter" placeholder="Client name..." value="{{ $filter ?? '' }}">
-                        <span id="passwordHelpInline" class="form-text">
-                                Type the whole or part of the name and press enter.
-                        </span>
-                        
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Filtrar</button>
             </form>
         </div>
         
@@ -43,7 +39,7 @@
                     <tr class="table-dark">
                         <!-- <th class="col-1">ID</th> -->
                         <th class="p-3" >@sortablelink('updated_at')</th>
-                        <th class="p-3" >@sortablelink('hostname', 'Hostname')</th>
+                        <th class="p-3" >@sortablelink('client_name', 'Hostname')</th>
                         <th class="p-3">@sortablelink('successful','Count successful')</th>
                         <th class="p-3">@sortablelink('warning','Count warning')</th>
                         <th class="p-3">@sortablelink('error','Count errors')</th>
