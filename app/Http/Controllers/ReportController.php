@@ -29,7 +29,7 @@ class ReportController extends Controller
     }
 
     
-    public function getEvents(Request $request){
+    public function getSummaryTask(Request $request){
         // Obtemos el número de elementos que quieres mostrar por página
         $perPage = 10;
 
@@ -64,7 +64,7 @@ class ReportController extends Controller
                 if ($hash_error) {
                     foreach ($hash_error as $str) {
                         if (strpos($str, "File hash does not match") !== false) {
-                            $hash_errors[] = [ $install->task_name .": " . $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') .$str , "id" => $report->client->id ];
+                            $hash_errors[] = [ $report->client->name . " reports at ". $report->updated_at->format('d-m-Y H:i:s') . ": " .$str , "id" => $report->client->id ];
                         }
                     }
                 }
@@ -72,7 +72,7 @@ class ReportController extends Controller
                 if ($download_error) {
                     foreach ($download_error as $str) {
                         if (strpos($str, "download") !== false) {
-                            $download_errors[] = [ $install->task_name .": ". $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') ." " .$str,  "id" => $report->client->id ];
+                            $download_errors[] = [ $report->client->name . " reports at ". $report->updated_at->format('d-m-Y H:i:s') . ": " . $str,  "id" => $report->client->id ];
                         }
                     }
                 }
@@ -80,9 +80,10 @@ class ReportController extends Controller
                 if ($command_output) {
                     foreach ($command_output as $str) {
                         if (strpos($str, "FAILED") !== false) {
-                            $task_failed[] = [ $install->task_name . ": " . $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . $str, "id" => $report->client->id ];
+                            $task_failed[] = [ $report->client->name . " reports at ". $report->updated_at->format('d-m-Y H:i:s') . ": " . $str, "id" => $report->client->id ];
                         } elseif (strpos($str, "SUCCESSFUL") !== false) {
                             $task_successful++;
+                            $str_successfull = $str;
                         }
                     }
                 }
@@ -100,9 +101,18 @@ class ReportController extends Controller
                 $last_events = array_merge($last_events,$task_failed);
             }
             
-            if ($task_successful > 0) {
-                $last_events[] =  [ $report->client->name . " at ". $report->updated_at->format('d-m-Y H:i:s') . ", " . $task_successful . " tasks successful", "id" => $report->client->id ];
+            // Si task_successfull es 1, guardamos la cadena $str_successfull en $last_events, si es mayor que 1, generamos custom message, por defecto, no hacemos nada
+            switch($task_successful){
+                case 1:
+                    $last_events = array_merge($last_events, $str_successfull);
+                    break;
+                case ($task_successful > 1):
+                    $last_events[] =  [ $report->client->name . " reports at ". $report->updated_at->format('d-m-Y H:i:s') . ": " . $task_successful . " tasks successful", "id" => $report->client->id ];
+                    break;
+                default:
+                    break;
             }
+            
         }
         
         //paginación

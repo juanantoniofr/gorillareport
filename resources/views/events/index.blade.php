@@ -7,17 +7,33 @@
         </div>
         <div class="col-md-12">
             <form method="GET">
-            <div class="col align-items-end d-flex flex-column mb-3">
-                <div class="d-flex flex-column ">
-                    <label for="filter" class="form-label">Filter</label>
-                    <input type="text" class="form-control" id="filter" name="filter" placeholder="Client name..." value="{{ $filter ?? '' }}">
-                    <span id="passwordHelpInline" class="form-text">
-                            Type the whole or part of the name and press enter.
-                    </span>
-                    
+            <!-- <form method="GET" action="{{ url('events') }}"> -->
+                <div class="form-group">
+                    <label for="error">Error</label>
+                    <input type="checkbox" id="error" name="error" value="1" {{ old('error') ? 'checked' : '' }}>
                 </div>
-            </div>
-                <!-- <button type="submit" class="btn btn-default mb-2">Filter</button> -->
+                    <div class="form-group">
+                    <label for="warning">Warning</label>
+                    <input type="checkbox" id="warning" name="warning" value="1" {{ old('warning') ? 'checked' : '' }}>
+                </div>
+                <div class="form-group">
+                    <label for="successful">Successful</label>
+                    <input type="checkbox" id="successful" name="successful" value="1" {{ old('successful') ? 'checked' : '' }}>
+                </div>
+                
+            
+                <div class="col align-items-end d-flex flex-column mb-3">
+                    <div class="d-flex flex-column ">
+                        <label for="filter" class="form-label">Filter</label>
+                        <input type="text" class="form-control" id="filter" name="filter" placeholder="Client name..." value="{{ $filter ?? '' }}">
+                        <span id="passwordHelpInline" class="form-text">
+                                Type the whole or part of the name and press enter.
+                        </span>
+                        
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Filtrar</button>
             </form>
         </div>
         
