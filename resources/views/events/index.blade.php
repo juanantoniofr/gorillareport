@@ -7,24 +7,25 @@
         </div>
         <div class="col-md-12">
             <form method="GET"> 
-                <!-- <form method="GET" action="{{ url('events') }}"> -->
                 <div class="row col-sm-12 py-3 row-cols-lg-auto row-cols-sm-auto">
                     
                     <div class="col" style="height: min-content;align-self: center;">
-                        <input type="checkbox" class="form-check-input" id="error" name="error" value="1" {{ old('error') ? 'checked' : '' }}>
+                        <input type="checkbox" class="form-check-input" id="error" name="error" value="1" @if ( old("error") ) checked @endif>
                         <label for="error" class="">Error</label>
                     </div>
                     <div class="col" style="height: min-content;align-self: center;">
-                        <input type="checkbox" class="form-check-input" id="warning" name="warning" value="1" {{ old('warning') ? 'checked' : '' }}>
+                        <input type="checkbox" class="form-check-input" id="warning" name="warning" value="1" @if ( old("warning") ) checked @endif>
                         <label for="warning" class="">Warning</label>
                     </div>
                     <div class="col" style="height: min-content;align-self: center;">
-                        <input type="checkbox" class="form-check-input" id="successful" name="successful" value="1" {{ old('successful') ? 'checked' : '' }}>
+                        <input type="checkbox" class="form-check-input" id="successful" name="successful" value="1"   @if ( old("successful") ) checked @endif>
+                        
+
                         <label for="successful" class="">Successful</label>
                     </div>
                     
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="filter" name="filter" placeholder="Client name..." value="{{ $filter ?? '' }}">
+                        <input type="text" class="form-control" id="client_name" name="client_name" placeholder="Client name..." value="{{ old("client_name") ?? '' }}">
                     </div>
                     <div class="col-sm-2">
                         <button type="submit" class="btn btn-primary">Submit</button>

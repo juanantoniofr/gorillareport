@@ -66,7 +66,8 @@
                                 @endforeach                        
                             </ul>
                         </p>
-                        {{ $reports->withPath('home')->links() }}
+                        {!! $reports->appends(\Request::except('page'))->render() !!}
+                        <!-- {{ $reports->withPath('home')->links() }} -->
                     </div>
                 </a>
             </div><!-- card last 10 reports -->

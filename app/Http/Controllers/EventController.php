@@ -21,27 +21,32 @@ class EventController extends Controller
             ->select('events.*', 'clients.name as client_name', 'clients.id as client_id')
             ->orderBy($sort, $direction == 'asc' ? 'asc' : 'desc');
 
-
+        
+        // Si existe el parámetro client_name en la solicitud
+        if( $request->filled('client_name')  && !empty($request->query('client_name')) ) {
+            // Se agrega una cláusula where que busca el nombre del cliente en la tabla clients
+            $client_name = $request->query('client_name');
+            $query->where('clients.name', 'like', "%$client_name%");
+        }
+        
+       
         if ($request->filled('error')) {
             $query->where('error', '>', 0);
-        } elseif ($request->filled('warning')) {
-            $query->where('warning', '>' , 0);
-        } elseif ($request->filled('successful')) {
-            $query->where('successful', '>' , 0);
         }
-
-    
-        $filter = $request->query('filter');
-
-        if (!empty($filter)) {
-            $events = $query->where('clients.name', 'like', '%'.$filter.'%')
-                ->paginate(5);
-        } else {
-            $events = $query->paginate(5);
+        if ($request->filled('warning')) {
+            $query->where('warning', '>', 0);
         }
+        if ($request->filled('successful')) {
+            $query->where('successful', '>', 0);
+        }
+        $events = $query->paginate(5); 
+
 
         
-        return view('events.index')->with('events', $events)->with('filter', $filter);
+        
+        // Guarda los parámetros en la sesión
+        $request->session()->flashInput($request->input());
+        return view('events.index')->with('events', $events);
     }
 
 }
