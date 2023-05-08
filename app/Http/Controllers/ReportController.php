@@ -46,14 +46,15 @@ class ReportController extends Controller
 
         // Inicializar array de eventos
         $last_events = [];
-
+        
         foreach ($reports as $report) {
+        
             $managed_install = json_decode($report->managed_install); 
-            
             $hash_errors = [];
             $download_errors = [];
             $task_failed = [];
             $task_successful = 0;
+            
             
             foreach ($managed_install as $install) {
                 $installing_ps1_block = $install->installing_ps1_block ?? null;
@@ -90,7 +91,7 @@ class ReportController extends Controller
             }
             
             if (!empty($hash_errors)) {
-                $last_events = $hash_errors;
+                $last_events = array_merge($last_events,$hash_errors);
             }
             
             if (!empty($download_errors)) {
@@ -123,6 +124,7 @@ class ReportController extends Controller
         // Agregar cualquier parámetro de consulta a la URL de la página
         $paginator->appends(request()->query());
 
+        //dd($paginator);
         return $paginator;
         
     }

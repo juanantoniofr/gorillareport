@@ -32,9 +32,27 @@
                 </a>
 
                 <div class="card-body">
-                    <p class="card-text text-danger"> Clients with task Errors: {{ $errors ?? 0 }}</p>
-                    <p class="card-text text-warning"> Clients with task Warnings: {{ $warnings ?? 0 }}</p>
-                    <p class="card-text text-success"> Clients with task Successful: {{ $successfuls ?? 0 }}</p>
+                    <p class="card-text text-danger"> 
+                        @if ($errors > 0) 
+                            <a class="text-danger text-decoration-none" href="{{ route('events',[ 'error' => 1]) }}"> Clients with errors: {{ $errors }} </a>
+                        @else 
+                            <a class="text-success text-decoration-none" href="{{ route('events',[ 'error' => 1]) }}"> Any clients with errors</a>
+                        @endif
+                    </p>
+                    <p class="card-text text-warning">
+                        @if ($warnings > 0) 
+                            <a class="text-warning text-decoration-none" href="{{ route('events',[ 'warning' => 1]) }}"> Clients with warnings: {{ $warnings }}</a>
+                        @else 
+                            <a class="text-success text-decoration-none" href="{{ route('events',[ 'warning' => 1]) }}"> Any clients with warnings</a>
+                        @endif
+                    </p>
+                    <p class="card-text text-success">
+                        @if ($successfuls > 0) 
+                            <a class="text-success text-decoration-none" href="{{ route('events',[ 'successful' => 1]) }}"> Clients with successful: {{ $successfuls }}</a>
+                        @else
+                            <a class="text-danger text-decoration-none" href="{{ route('events',[ 'successful' => 1]) }}"> Any clients with successful</a>
+                        @endif
+                    </p>
                 </div>
             </div>
             
@@ -66,8 +84,8 @@
                                 @endforeach                        
                             </ul>
                         </p>
-                        {!! $reports->appends(\Request::except('page'))->render() !!}
-                        <!-- {{ $reports->withPath('home')->links() }} -->
+                        <!--  {!! $reports->appends(\Request::except('page'))->render() !!} -->
+                        {{ $reports->withPath('home')->links() }} 
                     </div>
                 </a>
             </div><!-- card last 10 reports -->
