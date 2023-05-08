@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Client;
 use App\Models\Report;
 use Carbon\Carbon;
+use Config;
 
 class ClientController extends Controller
 {
@@ -42,6 +43,10 @@ class ClientController extends Controller
     
     public function register(Request $request)
     {
+        if (!isAllowedIp) {
+            return response()->json(['message' => 'ClientController@register: Ip fuera de rango permitido'], 400);
+        }
+
         try{
             
             $client = Client::updateOrCreate(
@@ -51,6 +56,8 @@ class ClientController extends Controller
                 ['ip' =>  request('ip'), 'name' => request('name')]
         
             );
+
+            Log::error('ClientController@register: ' . request('name') . ' registrado exitosamente');
 
         }catch(\Exception $e){
             Log::error('ClientController@register error al registrar cliente: ' . $e->getMessage());
@@ -200,10 +207,6 @@ class ClientController extends Controller
                 ]
             );
             
-            
-            
-            
-
 
             // Actualizar client
             // Sección global_info
@@ -260,4 +263,27 @@ class ClientController extends Controller
         
         return $content;
     }
+
+
+
+    private function isAllowedIp(String $ip)
+    {
+        
+        $ipRanges = Config::get('gorillareport.allowed_ip_ranges');
+        $allowed = false;
+
+        foreach ($ipRanges as $range) {
+            $start = ip2long($range['start']);
+            $end = ip2long($range['end']);
+            $ipLong = ip2long($ip);
+
+            if ($ipLong >= $start && $ipLong <= $end) {
+                $allowed = true;
+                break;
+            }
+        }
+
+        return $allowed;
+    }
+
 }
