@@ -43,7 +43,15 @@ class ClientController extends Controller
     
     public function register(Request $request)
     {
-        if (!isAllowedIp) {
+        
+        #Obtenemos los datos del request
+        $data = $request->all();
+        $arrayData = json_decode($data['report'], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PARTIAL_OUTPUT_ON_ERROR|JSON_THROW_ON_ERROR, 512);
+        
+        $isAllowedIp = $this->isAllowedIp($arrayData['ip']);
+
+        if (!$isAllowedIp) {
+            Log::error('ClientController@register: Ip fuera de rango permitido');
             return response()->json(['message' => 'ClientController@register: Ip fuera de rango permitido'], 400);
         }
 
@@ -51,19 +59,19 @@ class ClientController extends Controller
             
             $client = Client::updateOrCreate(
 
-                ['huid' =>  request('huid')],
+                ['huid' =>  $arrayData['huid']],
         
-                ['ip' =>  request('ip'), 'name' => request('name')]
+                ['ip' =>  $arrayData['ip'], 'name' => $arrayData['name']]
         
             );
 
-            Log::error('ClientController@register: ' . request('name') . ' registrado exitosamente');
-
+        
         }catch(\Exception $e){
             Log::error('ClientController@register error al registrar cliente: ' . $e->getMessage());
             return response()->json(['message' => 'ClientController@register: Error al registrar cliente'], 400);
         }
 
+        Log::info('ClientController@register: Cliente ' . $arrayData['ip'] . '  registrado exitosamente');
         return response()->json(['message' => 'ClientController@register: Cliente registrado exitosamente'], 200);
         
     }
@@ -85,12 +93,12 @@ class ClientController extends Controller
                     'information' => $data['report']
                 ]
             );
-            
         }catch(\Exception $e){
             Log::error('ClientController@updateBasicInformation: error al actualizar información básica:' . $e->getMessage());
             return response()->json(['message' => 'ClientController@updateBasicInformation: Error al actualizar información básica: ' . $e->getMessage()]);
         }
         
+        Log::info('ClientController@updateBasicInformation: Información básica actualizada exitosamente' . $client->name);
         return response()->json(['message' => 'ClientController@updateBasicInformation: Información actualizada exitosamente'], 200);
     }
 
@@ -108,7 +116,7 @@ class ClientController extends Controller
             // Obtener sección managed_installs
             $managed_install = '{}';
             try {
-                Log::error('ClientController@updateReport content $data[\'report\'] : ' . $data['report']);
+                //Log::info('ClientController@updateReport content $data[\'report\'] : ' . $data['report']);
                 $managed_installs = $this->getContentReport(json_decode($data['report'], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PARTIAL_OUTPUT_ON_ERROR|JSON_THROW_ON_ERROR, 512), 'managed_installs');
             }
             catch(\Exception $e){
@@ -121,9 +129,8 @@ class ClientController extends Controller
             $report_data = ['managed_install' => json_encode($managed_installs), 'managed_uninstall' => '{}', 'managed_update' => '{}'];
             $client->report()->updateOrCreate(
                 ['client_id' => $client->id],
-                $report_data);
-            
-            
+                $report_data
+            );
             
             //***************/
             // Generar evento a partir del reporte
@@ -154,11 +161,11 @@ class ClientController extends Controller
 
                 //installing_ps1_block
                 $installing_ps1_block = $install['installing_ps1_block'];
-                Log::error('ClientController@updateReport: $installing_ps1_block: ' . count($installing_ps1_block));
+                //Log::error('ClientController@updateReport: $installing_ps1_block: ' . count($installing_ps1_block));
                 if (isset( $installing_ps1_block['command_output'])) {
                     
                     $command_output = $installing_ps1_block['command_output'];
-                    Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
+                    //Log::error('ClientController@updateReport: $command_output: ' . count($command_output));    
                     
                     // Buscar la cadena "SUCCESSFUL"
                     if (count(array_filter($command_output, function($str) {
@@ -193,7 +200,7 @@ class ClientController extends Controller
                 }
 
                 
-                Log::error('ClientController@updateReport: $managed_installs_successfull: ' . $managed_installs_successfull);
+                //Log::error('ClientController@updateReport: $managed_installs_successfull: ' . $managed_installs_successfull);
             }
             
             
@@ -218,13 +225,13 @@ class ClientController extends Controller
                 // Retornar una respuesta de error
                 return response()->json(['message' => 'ClientController@updateReport: Error al obtener global_info']);
             }
-
-            $client->update
-            (
-                [
-                    'gorilla_global_info' => json_encode($global_info),
-                ]
-            );
+            Log::info('ClientController@updateReport: $global_info actualizada ' . $client->name);
+            
+            $client->update(
+                    [
+                        'gorilla_global_info' => json_encode($global_info),
+                    ]
+                );
             
             // Si todo salió bien, retornar una respuesta exitosa
             return response()->json(['message' => 'ClientController@updateReport: Reporte creado exitosamente']);
@@ -266,12 +273,16 @@ class ClientController extends Controller
 
 
 
-    private function isAllowedIp(String $ip)
+    private function isAllowedIp(String $ip_address)
     {
         
+        
+        $ip = str_replace('"', '', $ip_address);
+        Log::info('ClientController@isAllowedIp: debug -> $ip: ' . $ip);
         $ipRanges = Config::get('gorillareport.allowed_ip_ranges');
         $allowed = false;
 
+        Log::info($ipRanges);
         foreach ($ipRanges as $range) {
             $start = ip2long($range['start']);
             $end = ip2long($range['end']);
@@ -282,7 +293,7 @@ class ClientController extends Controller
                 break;
             }
         }
-
+       
         return $allowed;
     }
 
