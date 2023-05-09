@@ -32,13 +32,14 @@ class ListingController extends Controller
 
             //Obtenemos managed_install
             $managed_install = json_decode($report->managed_install);
-            //intialize variables
-            $task_failed = 0;
-            $task_successful = 0;
-            $task_name = '';
+            
             //para cada tarea en managed_install
             foreach($managed_install as $install){
-                  
+                //intialize variables
+                $task_failed = false;
+                $task_successful = false;
+                $task_name = '';      
+                
                 //obtemos installing_ps1_block
                 $installing_ps1_block = $install->installing_ps1_block ?? null;
 
@@ -55,10 +56,10 @@ class ListingController extends Controller
                         //para cada linea de command_output
                         foreach($command_output as $line){
                             if (strpos($line, "FAILED") !== false) {
-                                $task_failed = $task_failed + 1;
+                                $task_failed = true;
                                 break;
                             } elseif (strpos($line, "SUCCESSFUL") !== false) {
-                                $task_successful = $task_successful + 1;
+                                $task_successful = true;
                                 break;                                    
                             }
                         }
@@ -70,15 +71,17 @@ class ListingController extends Controller
                         if (!$existingTask) {
                             $newTask = new stdClass();
                             $newTask->task_name = $task_name;
-                            $newTask->task_failed = $task_failed;
-                            $newTask->task_successful = $task_successful;
-                            //$newTask->client_name = $report->client->name;
-                            //$newTask->client_id = $report->client->id;
+                            $task_failed ? $newTask->task_failed = 1 : $newTask->task_failed = 0;
+                            $task_successful ? $newTask->task_successful = 1 : $newTask->task_successful = 0;
+                            $newTask->client_name[] = $report->client->name;
+                            $newTask->client_id[] = $report->client->id;
                             $list_tasks->push($newTask);
                         }
                         else{
-                            $existingTask->task_failed = $existingTask->task_failed + $task_failed;
-                            $existingTask->task_successful = $existingTask->task_successful + $task_successful;
+                            $task_failed ? $existingTask->task_failed = $existingTask->task_failed + 1 : true;
+                            $task_successful ? $existingTask->task_successful = $existingTask->task_successful + 1 : true;
+                            $existingTask->client_name[] = $report->client->name;
+                            $existingTask->client_id[] = $report->client->id;
                         }
 
                     }

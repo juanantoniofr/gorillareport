@@ -3,7 +3,7 @@
 <div class="container py-5">
 <div class="row">
     <div class="col-md-12 py-3">
-        <h1>Software List</h1>
+        <h1>Task's List</h1>
     </div>
     <div class="col-md-12">
         <form method="GET">
@@ -20,26 +20,19 @@
             <!-- <button type="submit" class="btn btn-default mb-2">Filter</button> -->
         </form>
     </div>
-    {{ dd($list_tasks) }}
+    
     <div class="col-md-12">
-        <p>Example Software list  (static view)</p>
+        <h4>Task's list  </h4>
         <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="">Blender</a>
-                <span class="badge bg-primary rounded-pill">14 Instalations</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="">Gimp</a>
-                <span class="badge bg-primary rounded-pill">12 Instalations</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="">Davinci</a>
-                <span class="badge bg-primary rounded-pill">34 Instalations</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="">.......</a>
-                <span class="badge bg-primary rounded-pill">......</span>
-            <li>
+            @foreach ($list_tasks as $task)
+                <li class="list-group-item d-flex justify-content-between">
+                    <a href="">{{ $task->task_name }}</a>
+                    <div class="align-items-right">
+                        <span class="badge bg-success rounded-pill">Successfuls instalations: {{ $task->task_successful }}</span>
+                        <span class="badge bg-danger rounded-pill">Faileds instalations: {{ $task->task_failed }}</span>
+                    </div>
+                </li>
+            @endforeach
         </ul>
     </div>
 </div>
