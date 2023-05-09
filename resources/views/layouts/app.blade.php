@@ -61,7 +61,7 @@
                                     Listings
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a href="{{ route('listings.software') }}" class="dropdown-item">Software</a>
+                                    <a href="{{ route('listings.tasks') }}" class="dropdown-item">Tasks</a>
                                     <a href="{{ route('listings.hardware') }}" class="dropdown-item">Hardware</a>
                                     <a href="" class="dropdown-item">System Events</a>
                                     

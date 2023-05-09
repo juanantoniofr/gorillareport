@@ -214,6 +214,9 @@ class ClientController extends Controller
                 ]
             );
             
+            Log::info('ClientController@updateReport: $managed_installs_successfull -> ' . $managed_installs_successfull . ' - '.  $client->name);
+            Log::info('ClientController@updateReport: $managed_installs_failed -> ' . $managed_installs_failed . ' - '.  $client->name);
+            Log::info('ClientController@updateReport: $managed_installs_warning -> ' . $managed_installs_warning . ' - '.  $client->name);
 
             // Actualizar client
             // Sección global_info
@@ -225,7 +228,7 @@ class ClientController extends Controller
                 // Retornar una respuesta de error
                 return response()->json(['message' => 'ClientController@updateReport: Error al obtener global_info']);
             }
-            Log::info('ClientController@updateReport: $global_info actualizada ' . $client->name);
+            
             
             $client->update(
                     [
@@ -234,6 +237,8 @@ class ClientController extends Controller
                 );
             
             // Si todo salió bien, retornar una respuesta exitosa
+            Log::info('ClientController@updateReport: update report successful ' . $client->name);
+            Log::info('ClientController@updateReport: ################### Terminamos #############');
             return response()->json(['message' => 'ClientController@updateReport: Reporte creado exitosamente']);
         }
         catch (\Exception $e) {
@@ -282,7 +287,7 @@ class ClientController extends Controller
         $ipRanges = Config::get('gorillareport.allowed_ip_ranges');
         $allowed = false;
 
-        Log::info($ipRanges);
+        //Log::info($ipRanges);
         foreach ($ipRanges as $range) {
             $start = ip2long($range['start']);
             $end = ip2long($range['end']);

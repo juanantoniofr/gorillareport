@@ -38,7 +38,7 @@ Route::get('reports', 'App\Http\Controllers\ReportController@index')->middleware
 Route::get('events', 'App\Http\Controllers\EventController@index')->middleware('auth')->name('events');
 
 // listing routes
-Route::get('listings/software', 'App\Http\Controllers\ListingController@software')->middleware('auth')->name('listings.software');
+Route::get('listings/task', 'App\Http\Controllers\ListingController@tasks')->middleware('auth')->name('listings.tasks');
 Route::get('listings/hardware', 'App\Http\Controllers\ListingController@hardware')->middleware('auth')->name('listings.hardware');
 Route::get('listings/SystemEvents', 'App\Http\Controllers\ListingController@SystemEvents')->middleware('auth')->name('listings.SystemEvents');
 

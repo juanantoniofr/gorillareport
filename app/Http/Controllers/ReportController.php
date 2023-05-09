@@ -105,10 +105,11 @@ class ReportController extends Controller
             // Si task_successfull es 1, guardamos la cadena $str_successfull en $last_events, si es mayor que 1, generamos custom message, por defecto, no hacemos nada
             switch($task_successful){
                 case 1:
-                    $last_events = array_merge($last_events, $str_successfull);
+                    $last_events[] = [ $report->client->name . " sent the eport at ". $report->updated_at->format('d-m-Y H:i:s') . ": " . $str_successfull , "id" => $report->client->id ];
+                    //array_merge($last_events, [ $str_successfull ] );
                     break;
                 case ($task_successful > 1):
-                    $last_events[] =  [ $report->client->name . " reports at ". $report->updated_at->format('d-m-Y H:i:s') . ": " . $task_successful . " tasks successful", "id" => $report->client->id ];
+                    $last_events[] =  [ $report->client->name . " sent the eport at ". $report->updated_at->format('d-m-Y H:i:s') . ": " . $task_successful . " tasks successful", "id" => $report->client->id ];
                     break;
                 default:
                     break;
@@ -128,5 +129,6 @@ class ReportController extends Controller
         return $paginator;
         
     }
+
 
 }

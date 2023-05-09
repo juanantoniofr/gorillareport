@@ -20,7 +20,7 @@
             <!-- <button type="submit" class="btn btn-default mb-2">Filter</button> -->
         </form>
     </div>
-
+    {{ dd($list_tasks) }}
     <div class="col-md-12">
         <p>Example Software list  (static view)</p>
         <ul class="list-group">
