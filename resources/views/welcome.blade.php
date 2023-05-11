@@ -35,8 +35,8 @@
                 
 
                 <div class="mt-16 text-center">
-                    <h1 style="font-size:72px;color:#d3d3d3">Gorilla Report - FCom us es</h1>
-                    <h2 style="font-size:28px;color:#939393">Developed by: Unitidad TIC</h2>
+                    <h1 style="font-size:72px;color:#d3d3d3">Gorilla Report</h1>
+                    <h2 style="font-size:28px;color:#939393">Developed by: Unidad TIC FCom</h2>
                 </div>
 
 
