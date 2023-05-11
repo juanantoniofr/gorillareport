@@ -13,16 +13,16 @@ Definir el array de rangos de ip permitidas para auto registro de pc-clients.
 Formato:
 
 return [
-        'allowed_ip_ranges' => [
-            [
-                'start' => 'AA.BB.XX.YY',
-                'end' => 'AA.BB.XX.ZZ'
-            ],
-            [
-                'start' => 'CC.DD.XX.YY',
-                 'end' => 'CC.DD.ZZ.WW'
-            ],
-        ]
+    'allowed_ip_ranges' => [
+        [
+            'start' => 'AA.BB.XX.YY',
+            'end' => 'AA.BB.XX.ZZ'
+        ],
+        [
+            'start' => 'CC.DD.XX.YY',
+            'end' => 'CC.DD.ZZ.WW'
+        ],
+       ]
 ];
 
 
