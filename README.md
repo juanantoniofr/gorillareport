@@ -9,21 +9,21 @@ Su objetivo es centralizar los logs que genera <a href="https://github.com/1dust
 * ./config/gorillareport.php
 
 Definir el array de rangos de ip permitidas para auto registro de pc-clients.
-Formato
 
+Formato:
 
-``return [
-        'allowed_ip_ranges' => [
-            [
-                'start' => 'AA.BB.XX.YY',
-                'end' => 'AA.BB.XX.ZZ'
-            ],
-            [
-                'start' => 'CC.DD.XX.YY',
-                 'end' => 'CC.DD.ZZ.WW'
-            ],
-    ´    ]
-];´´
+`return [`
+        `'allowed_ip_ranges' => [`
+            `[`
+                `'start' => 'AA.BB.XX.YY',`
+                `'end' => 'AA.BB.XX.ZZ'`
+            `],`
+            `[`
+                `'start' => 'CC.DD.XX.YY',`
+                 `'end' => 'CC.DD.ZZ.WW'`
+            `],`
+        `]`
+`];`
 
 
 ## SYNOPSIS: 
