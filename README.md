@@ -12,7 +12,7 @@ Definir el array de rangos de ip permitidas para auto registro de pc-clients.
 
 Formato:
 
-`return [
+return [
         'allowed_ip_ranges' => [
             [
                 'start' => 'AA.BB.XX.YY',
@@ -23,7 +23,7 @@ Formato:
                  'end' => 'CC.DD.ZZ.WW'
             ],
         ]
-];`
+];
 
 
 ## SYNOPSIS: 
