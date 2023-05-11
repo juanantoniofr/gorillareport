@@ -67,6 +67,16 @@ Requiere token de acceso.
 Registra logs de la última ejecución de gorilla.
 Requiere token de acceso.
 
+## Authors
+
+- [Luis Vela](https://github.com/luivelmor)
+- [Juan Antonio](https://github.com/juanantoniofr)
+
+# contact
+
+- Email:  luisvela@us.es | juanafr@us.es
+
+
 ## License
 
 The GorillaReport is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
