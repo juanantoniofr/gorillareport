@@ -23,7 +23,7 @@ Formato:
             'end' => 'CC.DD.ZZ.WW'
         ],
        ]
-];´´´
+];```
 
 
 ## SYNOPSIS: 
