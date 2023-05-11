@@ -1,6 +1,6 @@
 ## About GorillaReport
 
-GorillaReport <b>aims to be</b> a web-based reporting tool aimed at centralizing <a href="https://github.com/1dustindavis/gorilla">gorilla</a> logs for Windows systems inspired by <a href="https://github.com/munkireport/munkireport-php>">MunkiReport</a>.
+GorillaReport <b>aspira a ser</b> una herramienta de informes basada en web que tiene como objetivo centralizar los registros de <a href="https://github.com/1dustindavis/gorilla">gorilla</a> para sistemas Windows, está inspirada en <a href="https://github.com/munkireport/munkireport-php">MunkiReport</a>.
 
 ## License
 
