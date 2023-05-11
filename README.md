@@ -4,7 +4,29 @@ GorillaReport  es una utilidad web inspirada en <a href="https://github.com/munk
 
 Su objetivo es centralizar los logs que genera <a href="https://github.com/1dustindavis/gorilla">Gorilla</a> en cada uno de los equipos con Sistemas Windows donde se ejecuta en un único lugar. Asícomo procesar y presentar información relevante sobre el estado de los pc's clientes.
 
-# SYNOPSIS: 
+## Config
+
+* ./config/gorillareport.php
+
+Definir el array de rangos de ip permitidas para auto registro de pc-clients.
+Formato
+
+
+``return [
+        'allowed_ip_ranges' => [
+            [
+                'start' => 'AA.BB.XX.YY',
+                'end' => 'AA.BB.XX.ZZ'
+            ],
+            [
+                'start' => 'CC.DD.XX.YY',
+                 'end' => 'CC.DD.ZZ.WW'
+            ],
+    ´    ]
+];´´
+
+
+## SYNOPSIS: 
 
 API
 
