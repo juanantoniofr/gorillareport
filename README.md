@@ -28,7 +28,20 @@ return [
 ];
 
 ```
+* .env
 
+Configura el acceso a BD
+
+```
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=name_database
+DB_USERNAME=user_database 
+DB_PASSWORD=pass_database
+
+```
 
 ## Synopsis
 
