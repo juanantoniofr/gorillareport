@@ -72,7 +72,7 @@ Requiere token de acceso.
 - [Luis Vela](https://github.com/luivelmor)
 - [Juan Antonio](https://github.com/juanantoniofr)
 
-# contact
+# Contact
 
 - Email:  luisvela@us.es | juanafr@us.es
 
