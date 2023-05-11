@@ -19,7 +19,7 @@
                         <!--
                         <a href="{{ url('/clients/' . $client->id . '/edit') }}" title="Edit Client"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
                         -->
-                        {!! Form::open([
+                        <!-- {!! Form::open([
                             'method'=>'DELETE',
                             'url' => ['clients', $client->id],
                             'style' => 'display:inline'
@@ -30,7 +30,7 @@
                                     'title' => 'Delete Client',
                                     'onclick'=>'return confirm("Confirm delete?")'
                             ))!!}
-                        {!! Form::close() !!}
+                        {!! Form::close() !!}-->
                         <br/>
                         <br/>
 
