@@ -8,9 +8,7 @@ Su objetivo es centralizar los logs que genera <a href="https://github.com/1dust
 
 * ./config/gorillareport.php
 
-Definir el array de rangos de ip permitidas para auto registro de pc-clients.
-Para obtener el rango de la subnet asociada a una IP cualquiera del entorno puedes utilizar 
-la siguiente herramienta: https://www.calculator.net/ip-subnet-calculator.html
+Define el array de rangos de ip permitidas para auto registro de pc-clients: para obtener el rango de la subnet asociada a una IP cualquiera del entorno puedes utilizar la siguiente herramienta: https://www.calculator.net/ip-subnet-calculator.html
 
 
 Formato:
